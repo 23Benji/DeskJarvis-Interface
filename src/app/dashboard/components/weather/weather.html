@@ -1,0 +1,23 @@
+<div class="weather-horizontal" *ngIf="error || !weather">
+  <div class="weather-left">☁️</div>
+  <div class="weather-center">
+    <div class="weather-temp">--°</div>
+    <div class="weather-desc">No data — the sky’s offline</div>
+  </div>
+  <div class="weather-right">
+    <div class="weather-time">{{ time }}</div>
+    <div class="weather-city">Unknown</div>
+  </div>
+</div>
+
+<div class="weather-horizontal" *ngIf="!error && weather">
+  <div class="weather-left">{{ icon }}</div>
+  <div class="weather-center">
+    <div class="weather-temp">{{ weather.temperature | number:'1.0-0' }}°</div>
+    <div class="weather-desc">{{ description }}</div>
+  </div>
+  <div class="weather-right">
+    <div class="weather-time">{{ time }}</div>
+    <div class="weather-city">{{ city || 'Unknown' }}</div>
+  </div>
+</div>

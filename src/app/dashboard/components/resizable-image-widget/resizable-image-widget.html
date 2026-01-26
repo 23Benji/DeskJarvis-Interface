@@ -1,0 +1,8 @@
+<div class="widget-content" [style.width.px]="width" [style.height.px]="height">
+
+  <img src="/src/assets/images/mountains.jpg"
+       alt="Displayed"
+       style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px; pointer-events: none;">
+
+  <div class="resize-grip" (mousedown)="startResize($event)"></div>
+</div>

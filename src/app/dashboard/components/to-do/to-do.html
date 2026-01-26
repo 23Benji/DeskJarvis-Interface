@@ -1,0 +1,22 @@
+<div>
+  <h3 class="widget-title">To-Do</h3>
+  <ul class="todo-list">
+    <ng-container *ngIf="visibleTasks.length > 0; else emptyState">
+      <li *ngFor="let task of visibleTasks">
+        <label>
+          <input
+            type="checkbox"
+            [checked]="!!task.done"
+            (change)="handleCheck(task.id)"
+          />
+          <span class="task-text">{{ task.text }}</span>
+          <span class="task-date">{{ task.date }}</span>
+        </label>
+      </li>
+    </ng-container>
+
+    <ng-template #emptyState>
+      <li class="empty">All tasks done 🎉</li>
+    </ng-template>
+  </ul>
+</div>

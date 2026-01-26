@@ -1,0 +1,58 @@
+<div class="clock-widget">
+  <div class="menu-bar">
+    <button class="menu-icon" (click)="toggleMenu()">
+      <lucide-icon [img]="MenuIcon" size="20"></lucide-icon>
+    </button>
+
+    <div class="clock-title">
+      {{ activeTab | titlecase }}
+    </div>
+
+    <div class="dropdown-menu" *ngIf="menuOpen">
+      <button *ngFor="let tab of ['clock', 'stopwatch', 'timer', 'pomodoro']"
+              (click)="switchTab(tab)"
+              [class.active]="activeTab === tab">
+        {{ tab | titlecase }}
+      </button>
+    </div>
+  </div>
+
+  <div class="clock-display">
+
+    <div *ngIf="activeTab === 'clock'">
+      {{ time | date:'mediumTime' }}
+    </div>
+
+    <div *ngIf="activeTab === 'stopwatch'">
+      <div>{{ formatTime(stopwatch) }}</div>
+      <div class="button-row">
+        <button (click)="toggleRunning()">{{ running ? 'Pause' : 'Start' }}</button>
+        <button (click)="resetStopwatch()">Reset</button>
+      </div>
+    </div>
+
+    <div *ngIf="activeTab === 'timer'">
+      <div>{{ formatTime(timer) }}</div>
+
+      <div class="button-row" style="margin-top: 10px;">
+        <button *ngFor="let sec of [30, 60, 300, 600, 900]" (click)="setTimer(sec)">
+          {{ sec < 60 ? sec + 's' : (sec / 60) + 'm' }}
+        </button>
+      </div>
+
+      <div class="button-row">
+        <button (click)="toggleRunning()">{{ running ? 'Pause' : 'Start' }}</button>
+        <button (click)="resetTimer()">Reset</button>
+      </div>
+    </div>
+
+    <div *ngIf="activeTab === 'pomodoro'">
+      <div>{{ formatTime(pomodoro) }}</div>
+      <div class="button-row">
+        <button (click)="toggleRunning()">{{ running ? 'Pause' : 'Start' }}</button>
+        <button (click)="resetPomodoro()">Reset</button>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,66 @@
+<div class="dashboard">
+
+  <div class="ai-center">
+    <app-ai-widget></app-ai-widget>
+  </div>
+
+  <div *ngIf="widgets['clock']" class="widget" cdkDrag
+       style="position: absolute; top: 5%; left: 35%;">
+    <div class="drag-handle" cdkDragHandle></div>
+    <button class="hide-btn" (click)="hideWidget('clock')">×</button>
+    <app-clock></app-clock>
+  </div>
+
+  <div *ngIf="widgets['weather']" class="widget" cdkDrag
+       style="position: absolute; top: 15%; right: 7%;">
+    <div class="drag-handle" cdkDragHandle></div>
+    <button class="hide-btn" (click)="hideWidget('weather')">×</button>
+    <app-weather></app-weather>
+  </div>
+
+  <div *ngIf="widgets['calendar']" class="widget" cdkDrag
+       style="position: absolute; bottom: 5%; left: 5%;">
+    <div class="drag-handle" cdkDragHandle></div>
+    <button class="hide-btn" (click)="hideWidget('calendar')">×</button>
+    <app-calendar></app-calendar>
+  </div>
+
+  <div *ngIf="widgets['todo']" class="widget" cdkDrag
+       style="position: absolute; top: 40%; right: 3%;">
+    <div class="drag-handle" cdkDragHandle></div>
+    <button class="hide-btn" (click)="hideWidget('todo')">×</button>
+    <app-to-do></app-to-do>
+  </div>
+
+  <div *ngIf="widgets['notes']" class="widget" cdkDrag
+       style="position: absolute; top: 10%; left: 5%;">
+    <div class="drag-handle" cdkDragHandle></div>
+    <button class="hide-btn" (click)="hideWidget('notes')">×</button>
+    <app-notes></app-notes>
+  </div>
+
+  <div *ngIf="widgets['music']" class="widget" cdkDrag
+       style="position: absolute; bottom: 5%; right: 35%;">
+    <div class="drag-handle" cdkDragHandle></div>
+    <button class="hide-btn" (click)="hideWidget('music')">×</button>
+    <app-music-player></app-music-player>
+  </div>
+
+  <div *ngIf="widgets['image']" class="widget" cdkDrag
+       style="position: absolute; top: 10%; left: 25%;">
+    <div class="drag-handle" cdkDragHandle></div>
+    <button class="hide-btn" (click)="hideWidget('image')">×</button>
+    <app-resizable-image-widget></app-resizable-image-widget>
+  </div>
+
+  <div class="toolbox" [class.visible]="toolboxVisible">
+    <div *ngFor="let name of hiddenWidgets"
+         class="toolbox-icon"
+         [title]="name | uppercase"
+         (click)="showWidget(name)">
+
+         <lucide-icon [img]="Icons[name]" size="18"></lucide-icon>
+    </div>
+  </div>
+
+</div>

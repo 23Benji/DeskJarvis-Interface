@@ -1,1 +1,574 @@
-/* You can add global styles to this file, and also import other style files */
+body {
+  background-color: #000;
+  color: #fff;
+  font-family: 'Courier New', Courier, monospace;
+  overflow: hidden;
+  /* Prevents scrollbars when dragging */
+}
+
+.dashboard {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: visible;
+  /* don't clip the toolbox */
+  background: #000;
+  /* helps to visualize boundaries */
+
+}
+
+
+/* Base widget (for draggable items) */
+.widget {
+  padding: 15px;
+  background-color: #0000005c;
+  position: absolute;
+  min-width: 200px;
+}
+
+.drag-handle {
+  position: absolute;
+  top: 7px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 15px;
+  border-radius: 3px;
+  background: #555;
+  cursor: grab;
+  opacity: 0.6;
+}
+
+.drag-handle:hover {
+  opacity: 0.9;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+.hide-btn{
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 1.2em;
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+/* ────────────────────────────── */
+/* 🖼️ RESIZABLE IMAGE WIDGET     */
+/* ────────────────────────────── */
+
+.resize-grip {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 20px;
+  height: 20px;
+  border: 5px solid rgba(255, 255, 255, 0.15);
+  border-top-color: transparent;
+  border-left-color: transparent;
+  border-radius: 25%;
+  cursor: se-resize;
+  z-index: 20;
+}
+
+
+/* Prevents text/image selection while dragging the resize grip */
+.dashboard,
+.dashboard * {
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+
+/* ────────────────────────────── */
+/* 🤖 CENTER AI WIDGET (BIG CORE) */
+/* ────────────────────────────── */
+.ai-center {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  /* keeps widgets draggable above it */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  /* prevents the GIF from blocking clicks */
+}
+
+.ai-center img {
+  width: 480px;
+  /* make it big */
+  height: 480px;
+  opacity: 0.85;
+  user-select: none;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  filter: brightness(1.2) contrast(1.1);
+}
+
+
+
+/* ────────────────────────────── */
+/* 🕒 CLOCK WIDGET STYLING        */
+/* ────────────────────────────── */
+.clock-widget {
+  font-family: 'Orbitron', monospace;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+  width: 370px;
+  max-width: 90vw;
+  height: auto;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* Header bar (menu + title) */
+.menu-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.menu-icon {
+  background: transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 2px;
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.menu-icon:hover {
+  color: #ccc;
+}
+
+/* Title beside hamburger */
+.clock-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 1.2em;
+  color: #fff;
+  text-shadow: 0 0 6px #888;
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+  position: absolute;
+  top: 30px;
+  left: 0;
+  background: rgba(0, 0, 0, 0.95);
+  border: 1px solid #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 15px #fff;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px 6px;
+  padding: 6px 8px;
+  z-index: 99999;
+  animation: fadeIn 0.2s ease-in-out;
+  width: 200px;
+}
+
+.dropdown-menu button {
+  background: transparent;
+  border: none;
+  color: #fff;
+  padding: 4px 6px;
+  text-align: center;
+  cursor: pointer;
+  font-family: 'Orbitron', monospace;
+  font-size: 0.9em;
+  transition: 0.2s;
+  border-radius: 4px;
+}
+
+.dropdown-menu button:hover,
+.dropdown-menu button.active {
+  color: #000;
+  background: #fff;
+  text-shadow: none;
+}
+
+/* Main clock display */
+.clock-display {
+  font-size: 2.8em;
+  margin-top: 15px;
+  width: 100%;
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* Control buttons */
+button {
+  background: transparent;
+  border: 1px solid #fff;
+  color: #fff;
+  border-radius: 5px;
+  margin: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: 0.2s;
+}
+
+button:hover {
+  background: #fff;
+  color: #000;
+}
+
+/* Range slider for timer */
+input[type='range'] {
+  width: 100%;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.button-row {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+/* Smooth fade-in for dropdown */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ────────────────────────────── */
+/* 🗒 TO-DO WIDGET STYLING        */
+/* ────────────────────────────── */
+.todo-list {
+  font-family: 'Orbitron', monospace;
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0 0;
+}
+
+.todo-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 6px 0;
+  transition: opacity 0.4s ease;
+}
+
+.todo-list li.done {
+  opacity: 0.3;
+  text-decoration: line-through;
+}
+
+.todo-list input[type="checkbox"] {
+  accent-color: white;
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+.task-text {
+  flex: 1;
+  font-family: 'Orbitron', monospace;
+  cursor: pointer;
+}
+
+.task-date {
+  font-size: 0.8em;
+  opacity: 0.6;
+  margin-left: 8px;
+  font-family: 'Orbitron', monospace;
+}
+
+.todo-list .empty {
+  text-align: center;
+  opacity: 0.7;
+  margin-top: 20px;
+  font-family: 'Orbitron', monospace;
+  font-size: 0.9em;
+}
+
+/* ────────────────────────────── */
+/* 📅 CALENDAR WIDGET       */
+/* ────────────────────────────── */
+.calendar-widget {
+  width: 160px;
+  height: auto;
+  font-family: 'Orbitron', monospace;
+  color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  padding: 8px 10px;
+  text-align: center;
+}
+
+.calendar-grid {
+  display: flex;
+  flex-direction: column;
+  font-family: inherit;
+  text-align: center;
+  margin-top: 3px;
+}
+
+.calendar-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.calendar-day {
+  flex: 1;
+  padding: 2px;
+  font-size: 0.7em;
+  color: #fff;
+}
+
+.calendar-day.today {
+  border: 1px solid #fff;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.15);
+  font-weight: bold;
+}
+
+.calendar-day.empty {
+  visibility: hidden;
+}
+
+.calendar-footer {
+  margin-top: 4px;
+  font-size: 0.7em;
+  opacity: 0.6;
+}
+
+/* ────────────────────────────── */
+/* 🌤 DESK JARVIS WEATHER BAR     */
+/* ────────────────────────────── */
+.weather-horizontal {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 380px;
+  height: 90px;
+  padding: 10px 20px;
+  color: #fff;
+  font-family: 'Orbitron', monospace;
+  transition: 0.3s;
+}
+
+.weather-left {
+  font-size: 2.5em;
+  flex-shrink: 0;
+}
+
+.weather-center {
+  text-align: center;
+}
+
+.weather-temp {
+  font-size: 1.8em;
+  line-height: 1;
+}
+
+.weather-desc {
+  font-size: 0.8em;
+  opacity: 0.8;
+}
+
+.weather-right {
+  text-align: right;
+  font-size: 0.9em;
+  line-height: 1.2;
+}
+
+.weather-time {
+  font-size: 1.1em;
+}
+
+.weather-city {
+  opacity: 0.7;
+  font-size: 0.85em;
+}
+
+/* ────────────────────────────── */
+/* 🎵 OFFLINE MUSIC PLAYER        */
+/* ────────────────────────────── */
+.music-horizontal {
+  width: 340px;
+  height: 160px;
+  color: #fff;
+  font-family: 'Orbitron', monospace;
+  padding: 12px 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.music-title {
+  font-size: 1em;
+  margin-bottom: 4px;
+}
+
+.music-artist {
+  opacity: 0.7;
+}
+
+.music-controls {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  font-size: 1.5em;
+}
+
+.music-controls button {
+  background: transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.music-controls button:hover {
+  transform: scale(1.1);
+  color: #ccc;
+}
+
+.music-progress {
+  margin-top: 8px;
+}
+
+.bar {
+  width: 100%;
+  height: 4px;
+  background: #222;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  background: #fff;
+  transition: width 0.15s linear;
+}
+
+.time {
+  text-align: center;
+  font-size: 0.8em;
+  margin-top: 5px;
+  opacity: 0.8;
+}
+.music-mode-btns {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.music-mode-btns button {
+  background: transparent;
+  border: 1px solid white;
+  color: white;
+  border-radius: 5px;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.music-mode-btns button.active {
+  background: white;
+  color: black;
+}
+
+.music-mode-btns button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+
+/* ────────────────────────────── */
+/* 🧰 SMART TOOLBOX FINAL STYLE   */
+/* ────────────────────────────── */
+.toolbox {
+  position: fixed;
+  top: 50%;
+  right: -60px;
+  transform: translateY(-50%);
+  width: 50px;
+  background: rgba(255, 255, 255, 0.05);
+  border-left: 1px solid #fff;
+  backdrop-filter: blur(5px);
+  padding: 8px 0;
+  transition: right 0.4s ease, opacity 0.4s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  z-index: 9999;
+  border-radius: 10px 0 0 10px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Visible state (fade + slide) */
+.toolbox.visible {
+  right: 0;
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* Individual icon button */
+.toolbox-icon {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #fff;
+  color: #fff;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.toolbox-icon:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+/* 🔹 Glowing handle line */
+.toolbox-handle {
+  position: absolute;
+  left: -3px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 80px;
+  background: white;
+  opacity: 0.4;
+  border-radius: 3px;
+  box-shadow: 0 0 8px white;
+  transition: opacity 0.3s ease;
+}
+
+.toolbox.visible .toolbox-handle {
+  opacity: 0.1;
+  /* fades when open */
+}

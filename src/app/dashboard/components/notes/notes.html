@@ -1,0 +1,10 @@
+<div class="notes-widget">
+  <h3 class="notes-title">Notes</h3>
+  <div class="notes-container">
+    <ul>
+      <li *ngFor="let note of notes">
+        <strong>{{ note.title }}</strong> — {{ note.description }}
+      </li>
+    </ul>
+  </div>
+</div>
