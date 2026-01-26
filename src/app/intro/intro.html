@@ -1,7 +1,8 @@
 <div class="intro-container" [class.zoom-out]="isZooming">
   <canvas #canvas></canvas>
 
-  <div class="final-text" [style.opacity]="lettersRevealed >= 11 ? 1 : 0">
-    DESK JARVIS
-  </div>
+  <img src="/assets/images/Logo.svg"
+       class="intro-logo"
+       [class.visible]="logoVisible"
+       alt="Desk Jarvis Logo">
 </div>

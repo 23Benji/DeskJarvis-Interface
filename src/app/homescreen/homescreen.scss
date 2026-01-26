@@ -10,16 +10,26 @@
   font-family: 'Orbitron', sans-serif;
 }
 
-.system-title {
-  font-size: 4rem;
-  margin-bottom: 0.5rem;
-  text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+/* 🖼️ Logo Styling */
+.home-logo {
+  width: 800px; /* Big and bold */
+  max-width: 90%; /* Mobile friendly */
+  height: auto;
+  margin-bottom: 1rem;
+  /* Cyber glow effect */
+  filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.4));
+  transition: filter 0.3s ease;
+}
+
+.home-logo:hover {
+  filter: drop-shadow(0 0 25px rgba(0, 255, 255, 0.8));
 }
 
 .system-subtitle {
   font-size: 1.2rem;
   color: #888;
   margin-bottom: 3rem;
+  letter-spacing: 2px;
 }
 
 .menu-grid {
@@ -32,7 +42,7 @@
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 15px;
-  width: 200px;
+  width: 400px;
   height: 200px;
   display: flex;
   flex-direction: column;

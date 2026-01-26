@@ -10,33 +10,43 @@
   width: 100%;
   height: 100%;
   position: relative;
-  /* Prepare for the zoom */
   transition: transform 1.5s ease-in, opacity 1.5s ease-in;
   transform-origin: center center;
 }
 
-/* 🚀 THE ZOOM ANIMATION */
+/* 🚀 ZOOM Animation */
 .intro-container.zoom-out {
-  transform: scale(50); /* Zoom in 50x (so we fly through the letters) */
-  opacity: 0;           /* Fade to black as we fly through */
+  transform: scale(50);
+  opacity: 0;
 }
 
 canvas {
   display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
 }
 
-/* Overlay text to make the final title look solid just before zoom */
-.final-text {
+/* 🖼️ LOGO STYLES */
+.intro-logo {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: white;
-  font-family: monospace;
-  font-size: 20px; /* Must match canvas font size */
-  font-weight: bold;
-  letter-spacing: 0px; /* Adjust slightly to match canvas spacing if needed */
-  text-shadow: 0 0 10px #00FFFF;
-  pointer-events: none;
-  transition: opacity 0.5s;
+  width: 300px;  /* Adjust size as needed */
+  height: auto;
+  z-index: 2;
+
+  /* Start Invisible */
+  opacity: 0;
+  filter: drop-shadow(0 0 0px #00ffff);
+  transition: opacity 1s ease-in, filter 1s ease-in;
+}
+
+/* Reveal State */
+.intro-logo.visible {
+  opacity: 1;
+  /* Add a cool cyan glow when it appears */
+  filter: drop-shadow(0 0 20px #00ffff);
 }
