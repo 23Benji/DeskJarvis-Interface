@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MusicPlayerComponent } from './music-player';
+import { Homescreen } from './homescreen';
 
-describe('MusicPlayer', () => {
-  let component: MusicPlayerComponent;
-  let fixture: ComponentFixture<MusicPlayerComponent>;
+describe('Homescreen', () => {
+  let component: Homescreen;
+  let fixture: ComponentFixture<Homescreen>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MusicPlayerComponent]
+      imports: [Homescreen]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(MusicPlayerComponent);
+    fixture = TestBed.createComponent(Homescreen);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

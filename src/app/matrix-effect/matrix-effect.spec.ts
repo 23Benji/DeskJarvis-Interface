@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MusicPlayerComponent } from './music-player';
+import { MatrixEffect } from './matrix-effect';
 
-describe('MusicPlayer', () => {
-  let component: MusicPlayerComponent;
-  let fixture: ComponentFixture<MusicPlayerComponent>;
+describe('MatrixEffect', () => {
+  let component: MatrixEffect;
+  let fixture: ComponentFixture<MatrixEffect>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MusicPlayerComponent]
+      imports: [MatrixEffect]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(MusicPlayerComponent);
+    fixture = TestBed.createComponent(MatrixEffect);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

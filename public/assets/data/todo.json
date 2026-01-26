@@ -1,5 +1,5 @@
 [
-  { "id": 1, "text": "Finish Weather API integration", "date": "20.10.25", "done": 1 },
+  { "id": 1, "text": "Finish Weather API integration", "date": "20.10.25", "done": 0 },
   { "id": 2, "text": "Polish UI for Notes widget", "date": "22.10.25", "done": 1 },
   { "id": 3, "text": "Prepare presentation slides", "date": "25.10.25", "done": 1 }
 ]

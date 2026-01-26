@@ -1,7 +1,8 @@
 import { Component, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DragDropModule } from '@angular/cdk/drag-drop'; // 👈 Import for Dragging
-import { LucideAngularModule, Clock, Cloud, Calendar, CheckSquare, StickyNote, Music, Image as ImageIcon } from 'lucide-angular';
+import { LucideAngularModule, Clock, Cloud, Calendar, CheckSquare, StickyNote, Music, Image as ImageIcon,Home } from 'lucide-angular';
+import { RouterLink } from '@angular/router';
 
 // Import all our widget components
 import { AiWidgetComponent } from './components/ai-widget/ai-widget';
@@ -17,6 +18,7 @@ import { ResizableImageWidgetComponent } from './components/resizable-image-widg
   selector: 'app-dashboard',
   standalone: true,
   imports: [
+    RouterLink,
     CommonModule,
     DragDropModule,
     LucideAngularModule,
@@ -54,7 +56,8 @@ export class DashboardComponent {
     todo: CheckSquare,
     notes: StickyNote,
     music: Music,
-    image: ImageIcon
+    image: ImageIcon,
+    home: Home // 👈 Added for the button
   };
 
   // Toggle Widget Visibility
