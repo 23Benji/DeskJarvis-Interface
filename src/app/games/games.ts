@@ -1,19 +1,31 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { LucideAngularModule, LayoutDashboard, Gamepad2, Sparkles, Settings } from 'lucide-angular';
+// 👇 Imported specific icons: Bird, Activity, PieChart
+import { LucideAngularModule, LayoutDashboard, Bird, Activity, PieChart, Home } from 'lucide-angular';
 
 @Component({
   selector: 'app-games',
+  standalone: true,
   imports: [CommonModule, RouterLink, LucideAngularModule],
   templateUrl: './games.html',
-  styleUrl: './games.scss',
+  styleUrl: './games.scss'
 })
-export class Games {
+export class GamesComponent {
   readonly Icons = {
-    pacman: LayoutDashboard,
-    snake: Gamepad2,
-    tetris: Sparkles,
-    duck: Settings
+    // 🦆 Duck Hunt -> Bird
+    duck: Bird,
+
+    // 🧱 Tetris -> LayoutDashboard (Blocks)
+    tetris: LayoutDashboard,
+
+    // 🐍 Snake -> Activity (Squiggly line)
+    snake: Activity,
+
+    // ᗧ••• Pac-Man -> PieChart (Looks just like him!)
+    pacman: PieChart,
+
+    // 🏠 Back Button
+    home: Home
   };
 }

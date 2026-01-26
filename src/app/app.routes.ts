@@ -2,7 +2,7 @@ import { Routes, Router } from '@angular/router'; // 👈 Import Router
 import { inject } from '@angular/core';           // 👈 Import inject
 import { DashboardComponent } from './dashboard/dashboard';
 import { HomescreenComponent } from './homescreen/homescreen';
-import { Games } from './games/games';
+import { GamesComponent } from './games/games';
 import { MatrixEffectComponent } from './matrix-effect/matrix-effect';
 import { SettingsComponent } from './settings/settings';
 import { IntroComponent } from './intro/intro';
@@ -27,7 +27,7 @@ export const routes: Routes = [
 
   { path: 'home', component: HomescreenComponent },
   { path: 'dashboard', component: DashboardComponent },
-  { path: 'games', component: Games },
+  { path: 'games', component: GamesComponent },
   { path: 'games/duck', component: Duck },
   { path: 'matrix', component: MatrixEffectComponent },
   { path: 'settings', component: SettingsComponent },
