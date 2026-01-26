@@ -1,12 +1,9 @@
 import k from '../kaplayCtx';
 import gameManager from '../gameManager';
 import { COLORS } from '../constant';
-import type { Vec2 } from 'kaplay';
-// You can remove the import for DuckGameObj if you don't have the types file,
-// otherwise keep it. We use 'any' casting below to be safe.
-import type { DuckGameObj } from './types'; 
+import type { Vec2, GameObj } from 'kaplay';
 
-export default function makeDuck(duckId: string, speed: number): DuckGameObj {
+export default function makeDuck(duckId: string, speed: number) {
   const startingPos = [
     k.vec2(80, k.center().y + 40),
     k.vec2(k.center().x, k.center().y + 40),
@@ -39,12 +36,12 @@ export default function makeDuck(duckId: string, speed: number): DuckGameObj {
       speed,
 
       flyDirection: k.vec2(0, 0),
-      quackingSound: null,
-      flappingSound: null,
-      fallSound: null,
+      quackingSound: null as any,
+      flappingSound: null as any,
+      fallSound: null as any,
 
-      setBehavior(this: DuckGameObj) {
-        // Cast to 'any' to avoid TS errors
+      setBehavior(this: any) {
+        // Cast sky to any to avoid TypeScript errors
         const sky = k.get('sky')[0] as any;
 
         this.flyDirection = flyDirections[chosenFlyDirectionIndex];
@@ -83,8 +80,8 @@ export default function makeDuck(duckId: string, speed: number): DuckGameObj {
         this.onStateEnter('shot', async () => {
           gameManager.nbDucksShotInRound++;
           this.play('shot');
-          this.quackingSound?.stop();
-          this.flappingSound?.stop();
+          if (this.quackingSound) this.quackingSound.stop();
+          if (this.flappingSound) this.flappingSound.stop();
           await k.wait(0.2);
           this.enterState('fall');
         });
@@ -97,20 +94,25 @@ export default function makeDuck(duckId: string, speed: number): DuckGameObj {
         this.onStateUpdate('fall', async () => {
           this.move(0, this.speed);
 
+          // Check if duck hit the ground
           if (this.pos.y > k.height() - 70) {
-            this.fallSound?.stop();
+            if (this.fallSound) this.fallSound.stop();
             k.play('impact');
             k.destroy(this);
 
-            // 👇 FIXED: Use k.color() instead of k.Color.fromHex()
+            // Change sky color temporarily
             if (sky) sky.color = k.color(COLORS.BLUE);
 
+            // --- HIT ICON LOGIC ---
+            // Find the specific icon for this duck and turn it RED
             const duckIcon = k.get(`duckIcon-${this.duckId}`, {
               recursive: true,
             })[0] as any;
 
-            // 👇 FIXED: Use k.color() instead of k.Color.fromHex()
-            if (duckIcon) duckIcon.color = k.color(COLORS.RED);
+            if (duckIcon) {
+              duckIcon.color = k.color(COLORS.RED);
+            }
+            // ----------------------
 
             await k.wait(1);
             gameManager.enterState('duck-hunted');
@@ -118,7 +120,9 @@ export default function makeDuck(duckId: string, speed: number): DuckGameObj {
         });
 
         this.onClick(() => {
+          // If bullets are gone (calculated in main.ts), don't kill the duck
           if (gameManager.nbBulletsLeft < 0) return;
+          
           gameManager.currentScore += 100;
           this.enterState('shot');
         });
@@ -126,16 +130,14 @@ export default function makeDuck(duckId: string, speed: number): DuckGameObj {
         this.loop(1, () => {
           this.flyTimer++;
           if (this.flyTimer === this.timeBeforeEscape) {
-            // 👇 FIXED: Use k.color()
             if (sky) sky.color = k.color(COLORS.BEIGE);
           }
         });
 
         this.onExitScreen(() => {
-          this.quackingSound?.stop();
-          this.flappingSound?.stop();
+          if (this.quackingSound) this.quackingSound.stop();
+          if (this.flappingSound) this.flappingSound.stop();
           
-          // 👇 FIXED: Use k.color()
           if (sky) sky.color = k.color(COLORS.BLUE);
           
           gameManager.nbBulletsLeft = 3;
@@ -143,5 +145,5 @@ export default function makeDuck(duckId: string, speed: number): DuckGameObj {
         });
       },
     },
-  ]) as DuckGameObj;
+  ]);
 }
