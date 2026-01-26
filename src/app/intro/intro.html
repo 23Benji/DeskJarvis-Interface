@@ -1,8 +1,17 @@
-<div class="intro-container" [class.zoom-out]="isZooming">
+<div class="intro-container" [class.fade-exit]="isFadingOut">
+
   <canvas #canvas></canvas>
 
-  <img src="/assets/images/Logo.svg"
-       class="intro-logo"
-       [class.visible]="logoVisible"
-       alt="Desk Jarvis Logo">
+  <div class="center-content">
+
+    <h1 class="welcome-text">
+      {{ welcomeText }}<span class="cursor">_</span>
+    </h1>
+
+    <img src="/assets/images/Logo.svg"
+         class="intro-logo"
+         [class.visible]="logoVisible"
+         alt="Desk Jarvis Logo">
+  </div>
+
 </div>

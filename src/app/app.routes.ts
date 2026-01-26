@@ -1,34 +1,40 @@
-import { Routes, Router } from '@angular/router'; // 👈 Import Router
-import { inject } from '@angular/core';           // 👈 Import inject
+import { Routes, Router } from '@angular/router';
+import { inject } from '@angular/core';
 import { DashboardComponent } from './dashboard/dashboard';
 import { HomescreenComponent } from './homescreen/homescreen';
 import { GamesComponent } from './games/games';
 import { MatrixEffectComponent } from './matrix-effect/matrix-effect';
 import { SettingsComponent } from './settings/settings';
 import { IntroComponent } from './intro/intro';
-import { Duck } from './games/duck/duck';
+import { TutorialComponent } from './tutorial/tutorial';
 
 export const routes: Routes = [
   {
     path: '',
     component: IntroComponent,
-    // 👇 The Guard Logic
     canActivate: [() => {
       const router = inject(Router);
-      // Check if we remember showing the intro
+
+      // 1. Check if Intro was seen
       if (sessionStorage.getItem('introShown')) {
-        // If yes, go straight to Home
-        return router.parseUrl('/home');
+
+        // 2. If Intro done, check if Tutorial was seen
+        if (sessionStorage.getItem('tutorialShown')) {
+          return router.parseUrl('/home'); // Both done -> Go Home
+        } else {
+          return router.parseUrl('/tutorial'); // Intro done, Tutorial not -> Go Tutorial
+        }
       }
-      // If no, allow the Intro to play
+
+      // 3. Nothing seen -> Play Intro
       return true;
     }]
   },
 
+  { path: 'tutorial', component: TutorialComponent }, // 👈 New Route
   { path: 'home', component: HomescreenComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'games', component: GamesComponent },
-  { path: 'games/duck', component: Duck },
   { path: 'matrix', component: MatrixEffectComponent },
   { path: 'settings', component: SettingsComponent },
 

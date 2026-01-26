@@ -38,12 +38,12 @@ export class DashboardComponent {
   // 1. Add 'Record<string, boolean>' type here 👇
   widgets: Record<string, boolean> = {
     clock: true,
-    weather: true,
-    calendar: true,
-    todo: true,
-    notes: true,
-    music: true,
-    image: true,
+    weather: false,
+    calendar: false,
+    todo: false,
+    notes: false,
+    music: false,
+    image: false,
   };
 
   toolboxVisible = false;

@@ -10,13 +10,10 @@
   width: 100%;
   height: 100%;
   position: relative;
-  transition: transform 1.5s ease-in, opacity 1.5s ease-in;
-  transform-origin: center center;
+  transition: opacity 1.5s ease-in-out;
 }
 
-/* 🚀 ZOOM Animation */
-.intro-container.zoom-out {
-  transform: scale(50);
+.intro-container.fade-exit {
   opacity: 0;
 }
 
@@ -28,25 +25,55 @@ canvas {
   z-index: 1;
 }
 
-/* 🖼️ LOGO STYLES */
-.intro-logo {
+.center-content {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 300px;  /* Adjust size as needed */
-  height: auto;
   z-index: 2;
-
-  /* Start Invisible */
-  opacity: 0;
-  filter: drop-shadow(0 0 0px #00ffff);
-  transition: opacity 1s ease-in, filter 1s ease-in;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
-/* Reveal State */
+/* ⌨️ TYPEWRITER STYLES */
+.welcome-text {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2rem;
+  color: #fff;
+  letter-spacing: 5px;
+  margin-bottom: 20px;
+  text-shadow: 0 0 10px #00ffff;
+  min-height: 2.4rem; /* Keeps layout stable before text appears */
+}
+
+/* Blinking Cursor */
+.cursor {
+  display: inline-block;
+  margin-left: 5px;
+  animation: blink 1s infinite;
+  color: #ffffff;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* 🖼️ LOGO STYLES */
+.intro-logo {
+  width: 600px;
+  max-width: 90vw;
+  height: auto;
+
+  opacity: 0; /* Hidden until typing finishes */
+  filter: drop-shadow(0 0 0px #00ff22);
+  transition: opacity 1.5s ease-in, filter 1.5s ease-in;
+}
+
 .intro-logo.visible {
   opacity: 1;
-  /* Add a cool cyan glow when it appears */
-  filter: drop-shadow(0 0 20px #00ffff);
+  filter: drop-shadow(0 0 30px #00ff22);
 }

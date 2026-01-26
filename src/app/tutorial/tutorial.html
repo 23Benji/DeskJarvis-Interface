@@ -1,0 +1,51 @@
+<div class="tutorial-container">
+
+  <h1 class="title">NEURAL LINK ACTIVE</h1>
+  <p class="subtitle">Hand Gesture Control System</p>
+
+  <div class="cards-wrapper">
+
+    <div class="card">
+      <div class="icon-circle">
+        <lucide-icon [img]="Icons.move" size="40"></lucide-icon>
+      </div>
+      <h3>Cursor</h3>
+      <p class="gesture-instruction">Index Finger Up</p>
+      <p class="desc">Move your index finger to control the mouse pointer.</p>
+    </div>
+
+    <div class="card">
+      <div class="icon-circle">
+        <lucide-icon [img]="Icons.click" size="40"></lucide-icon>
+      </div>
+      <h3>Left Click</h3>
+      <p class="gesture-instruction">Pinch Index & Thumb</p>
+      <p class="desc">Touch your thumb and index finger together to click.</p>
+    </div>
+
+    <div class="card">
+      <div class="icon-circle">
+        <lucide-icon [img]="Icons.drag" size="40"></lucide-icon>
+      </div>
+      <h3>Drag & Drop</h3>
+      <p class="gesture-instruction">Hold Pinch & Move</p>
+      <p class="desc">Keep fingers pinched while moving to drag windows.</p>
+    </div>
+
+    <div class="card">
+      <div class="icon-circle">
+        <lucide-icon [img]="Icons.scroll" size="40"></lucide-icon>
+      </div>
+      <h3>Scroll</h3>
+      <p class="gesture-instruction">Index & Middle Up</p>
+      <p class="desc">Raise two fingers to activate scroll mode.</p>
+    </div>
+
+  </div>
+
+  <button class="finish-btn" (click)="finishTutorial()">
+    <lucide-icon [img]="Icons.finish" size="20"></lucide-icon>
+    <span>INITIALIZE SYSTEM</span>
+  </button>
+
+</div>
