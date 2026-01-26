@@ -1,1 +1,26 @@
-<p>games works!</p>
+<div class="home-container">
+  <h1 class="system-title">GAMES HUB</h1>
+  <p class="system-subtitle">Select a game to play</p>
+
+  <div class="menu-grid">
+    <a routerLink="/games/duck-hunt" class="menu-card">
+      <lucide-icon [img]="Icons.duck" size="48"></lucide-icon>
+      <span>Duck Hunt</span>
+    </a>
+
+    <a routerLink="/games/tetris" class="menu-card">
+      <lucide-icon [img]="Icons.tetris" size="48"></lucide-icon>
+      <span>Tetris</span>
+    </a>
+
+    <a routerLink="/games/snake" class="menu-card">
+      <lucide-icon [img]="Icons.snake" size="48"></lucide-icon>
+      <span>Snake</span>
+    </a>
+
+    <a routerLink="/games/pacman" class="menu-card">
+      <lucide-icon [img]="Icons.pacman" size="48"></lucide-icon>
+      <span>Pac-Man</span>
+    </a>
+  </div>
+</div>
