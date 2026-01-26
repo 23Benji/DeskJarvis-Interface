@@ -11,7 +11,7 @@ import { LucideAngularModule, LayoutDashboard, Bird, Activity, PieChart, Home } 
   templateUrl: './games.html',
   styleUrl: './games.scss'
 })
-export class GamesComponent {
+export class Games {
   readonly Icons = {
     // 🦆 Duck Hunt -> Bird
     duck: Bird,
