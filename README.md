@@ -1,59 +1,152 @@
-# DeskJarvisAng
+# 🤖 DeskJarvis (Angular Edition)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.10.
+**DeskJarvis** is a futuristic, web-based personal dashboard and desktop simulator. Built with the cutting-edge **Angular 20**, it combines productivity tools with retro gaming entertainment in a fully customizable, draggable interface.
 
-## Development server
+> *Your personal AI-assisted workspace, reimagined for the web.*
 
-To start a local development server, run:
+---
 
+## ✨ Key Features
+
+### 🖥️ Interactive Dashboard
+
+A fully modular workspace where you control the layout.
+
+* **Draggable Widgets:** Powered by `@angular/cdk`, organize your screen exactly how you want it.
+* **Widget Toolbox:** Hide widgets to clear clutter and restore them via a sleek toolbox menu.
+* **Persistent State:** Smart routing logic remembers if you have seen the Intro or Tutorial.
+
+### 🧩 Smart Widgets
+
+* **🧠 AI Center:** An integrated AI interaction point.
+* **🎵 Music Player:** Built-in audio controls for your workflow vibes.
+* **☁️ Weather & 🕒 Clock:** Real-time updates.
+* **📝 Notes & 📅 Calendar:** Keep track of your tasks and schedule.
+* **🖼️ Resizable Images:** Pin your favorite visuals to the dashboard.
+
+### 🕹️ Arcade Hub (Powered by Kaplay)
+
+Need a break? Switch to the Games tab for integrated browser games:
+
+* **🦆 Duck Hunt:** A retro classic reimagined.
+* **🧱 Tetris:** The timeless puzzle game.
+
+### 🎨 Visual & UX
+
+* **Matrix Effect:** a Cyberpunk-inspired visual mode.
+* **Immersive Intro:** Cinematic introduction sequence.
+* **Interactive Tutorial:** Guided onboarding for new users.
+
+---
+
+## 🛠️ Tech Stack
+
+* **Framework:** [Angular 20.3](https://angular.dev/) (Standalone Components)
+* **Build Tool:** Vite & Angular CLI
+* **Styling:** SCSS (Sass)
+* **Icons:** [Lucide Angular](https://lucide.dev/)
+* **Game Engine:** [Kaplay.js](https://kaplayjs.com/) (formerly Kaboom.js)
+* **Interactivity:** Angular CDK (Drag & Drop)
+* **State Management:** RxJS
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+* Node.js (v18 or higher recommended)
+* npm or yarn
+
+### Installation
+
+1. **Clone the repository**
 ```bash
+git clone https://github.com/your-username/desk-jarvis-ang.git
+cd desk-jarvis-ang
+
+```
+
+
+2. **Install dependencies**
+```bash
+npm install
+
+```
+
+
+3. **Run the development server**
+```bash
+npm start
+# OR
 ng serve
+
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
 
-## Code scaffolding
+4. **Open the app**
+Navigate to `http://localhost:4200/`.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+---
 
-```bash
-ng generate component component-name
+## 📂 Project Structure
+
+```text
+src/
+├── app/
+│   ├── dashboard/       # Main desktop interface & widgets
+│   ├── games/           # Game Hub (Duck Hunt, Tetris)
+│   ├── homescreen/      # Landing page after intro
+│   ├── intro/           # Cinematic intro sequence
+│   ├── matrix-effect/   # Visual screensaver effect
+│   ├── settings/        # Application configuration
+│   ├── tutorial/        # User onboarding flow
+│   ├── app.routes.ts    # Routing logic (Guards & Paths)
+│   └── app.config.ts    # Application configuration
+└── assets/              # Graphics, Sounds, and Data models
+
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+---
 
-```bash
-ng generate --help
-```
+## 🧭 Application Flow
 
-## Building
+The application features an intelligent routing flow defined in `app.routes.ts`:
 
-To build the project run:
+1. **Root (`/`)**: Checks `sessionStorage`.
+* *First time?* → Plays **Intro**.
+* *Intro done?* → Plays **Tutorial**.
+* *All done?* → Goes to **Home**.
 
-```bash
-ng build
-```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+2. **Home (`/home`)**: The central landing pad.
+3. **Dashboard (`/dashboard`)**: The main draggable workspace.
 
-## Running unit tests
+---
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## 👾 Scripts
 
-```bash
-ng test
-```
+| Command | Description |
+| --- | --- |
+| `npm start` | Runs the app in development mode (ng serve). |
+| `npm run build` | Builds the app for production. |
+| `npm test` | Runs unit tests via Karma/Jasmine. |
+| `npm run dev` | Runs via Vite directly. |
 
-## Running end-to-end tests
+---
 
-For end-to-end (e2e) testing, run:
+## 🤝 Contributing
 
-```bash
-ng e2e
-```
+Contributions are welcome! If you want to add a new widget or game:
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+1. Fork the project.
+2. Create your feature branch (`git checkout -b feature/AmazingWidget`).
+3. Commit your changes (`git commit -m 'Add some AmazingWidget'`).
+4. Push to the branch (`git push origin feature/AmazingWidget`).
+5. Open a Pull Request.
 
-## Additional Resources
+---
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## 📜 License
+
+This project is licensed under the MIT License - see the [LICENSE](https://www.google.com/search?q=LICENSE) file for details.
