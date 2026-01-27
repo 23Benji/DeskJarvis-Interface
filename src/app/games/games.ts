@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 // 👇 Imported specific icons: Bird, Activity, PieChart
-import { LucideAngularModule, LayoutDashboard, Bird, Activity, PieChart, Home } from 'lucide-angular';
+import { LucideAngularModule, LayoutDashboard, Bird, Activity, AlignHorizontalSpaceBetween, Home } from 'lucide-angular';
 
 @Component({
   selector: 'app-games',
@@ -19,11 +19,7 @@ export class Games {
     // 🧱 Tetris -> LayoutDashboard (Blocks)
     tetris: LayoutDashboard,
 
-    // 🐍 Snake -> Activity (Squiggly line)
-    snake: Activity,
-
-    // ᗧ••• Pac-Man -> PieChart (Looks just like him!)
-    pacman: PieChart,
+    pong: AlignHorizontalSpaceBetween,
 
     // 🏠 Back Button
     home: Home

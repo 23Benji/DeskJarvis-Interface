@@ -7,18 +7,17 @@ export function startTetris(containerId: string) {
   const container = document.getElementById(containerId);
   if (!container) throw new Error("Tetris container not found");
 
-  // Calculate the logical game size
-  const gameWidth = BOARD_WIDTH * BLOCK_SIZE + 100; // Board + UI space
+  const gameWidth = BOARD_WIDTH * BLOCK_SIZE + 100;
   const gameHeight = BOARD_HEIGHT * BLOCK_SIZE;
 
   initKaplay({
     width: gameWidth,
     height: gameHeight,
-    letterbox: true,      // 👈 KEY FIX: Scales game to fit container
+    letterbox: true,
     background: [10, 10, 10],
     root: container,
     debug: false,
-    pixelDensity: devicePixelRatio, // Makes text crisp when scaled up
+    pixelDensity: devicePixelRatio,
   });
 
   initGameManager();
@@ -33,21 +32,18 @@ function setupScenes() {
     gameManager.reset();
 
     // -- UI --
-    // Vertical line
     k.add([
       k.rect(2, k.height()),
       k.pos(BOARD_WIDTH * BLOCK_SIZE, 0),
       k.color(100, 100, 100)
     ]);
 
-    // Score
     const scoreLabel = k.add([
       k.text("0", { size: 24 }),
       k.pos(BOARD_WIDTH * BLOCK_SIZE + 10, 20),
       k.color(255, 255, 255)
     ]);
 
-    // Controls Text
     k.add([
       k.text("CLICK:\nRotate", { size: 10 }),
       k.pos(BOARD_WIDTH * BLOCK_SIZE + 10, 80),
@@ -57,21 +53,16 @@ function setupScenes() {
       k.pos(BOARD_WIDTH * BLOCK_SIZE + 10, 120),
     ]);
     
-    // -- GAMEPLAY STATE --
     let currentPiece = spawnPiece();
     let dropTimer = 0;
     const dropInterval = 0.5;
 
     // -- INPUTS --
-
-    // 1. Mouse X Movement
     k.onUpdate(() => {
       if (gameManager.isGameOver) return;
 
       const mPos = k.mousePos();
-      
-      // We must clamp the mouse position to the logic board width
-      // because letterbox might create black bars where mouse coordinates exist
+      // Clamp logic mouse X
       const logicMouseX = Math.min(Math.max(0, mPos.x), BOARD_WIDTH * BLOCK_SIZE);
       
       let targetCol = Math.floor(logicMouseX / BLOCK_SIZE);
@@ -91,7 +82,6 @@ function setupScenes() {
       scoreLabel.text = String(gameManager.score);
     });
 
-    // 2. Click to Rotate
     k.onClick(() => {
       if (gameManager.isGameOver) {
         k.go("game");
@@ -100,7 +90,6 @@ function setupScenes() {
       rotatePiece(currentPiece);
     });
 
-    // 3. Enter to Hard Drop
     k.onKeyPress("enter", () => {
       if (gameManager.isGameOver) return;
       while (!checkCollision(currentPiece, 0, 1)) {
@@ -138,6 +127,7 @@ function setupScenes() {
               width: BLOCK_SIZE - 1,
               height: BLOCK_SIZE - 1,
               pos: k.vec2(x * BLOCK_SIZE, y * BLOCK_SIZE),
+              // 🛠️ FIX: Use Hex Converter
               color: hexToKColor(gameManager.board[y][x]),
             });
           }
@@ -152,8 +142,7 @@ function setupScenes() {
   });
 }
 
-// -- HELPERS --
-
+// 🛠️ FIX: Helper to convert Hex String to Kaplay RGB
 function hexToKColor(hex: string) {
   const r = parseInt(hex.substring(1, 3), 16);
   const g = parseInt(hex.substring(3, 5), 16);
@@ -248,6 +237,7 @@ function drawMatrix(matrix: any[][], offsetX: number, offsetY: number, colorHex:
             width: BLOCK_SIZE - 1,
             height: BLOCK_SIZE - 1,
             pos: k.vec2((offsetX + c) * BLOCK_SIZE, (offsetY + r) * BLOCK_SIZE),
+            // 🛠️ FIX: Use Hex Converter
             color: hexToKColor(colorHex)
         });
       }
@@ -267,5 +257,6 @@ function gameOver() {
     k.text("Click to restart", { size: 16 }),
     k.anchor("center"),
     k.pos(BOARD_WIDTH * BLOCK_SIZE / 2, (BOARD_HEIGHT * BLOCK_SIZE / 2) + 40),
+    k.color(255, 0, 0)
   ]);
 }

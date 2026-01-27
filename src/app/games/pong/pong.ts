@@ -1,37 +1,32 @@
 import { Component, AfterViewInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule, ArrowLeft } from 'lucide-angular';
-import { startDuckHunter } from './logic/main';
+import { startPong } from './logic/main';
 import k from './logic/kaplayCtx';
-import { LoaderComponent } from '../../shared/loader'; // 👈 Import Loader
+import { LoaderComponent } from '../../shared/loader';
 
 @Component({
-  selector: 'app',
+  selector: 'app-pong',
   standalone: true,
   imports: [CommonModule, LucideAngularModule, LoaderComponent],
   template: `
-    <!-- 1. LOADING SCREEN -->
     <app-loader *ngIf="isLoading"></app-loader>
 
-    <!-- 2. GAME CONTENT (Hidden until loaded) -->
     <div class="game-wrapper" *ngIf="!isLoading">
       <a href="/games" class="back-btn">
         <lucide-icon [img]="ArrowLeft" size="24"></lucide-icon>
         <span>EXIT</span>
       </a>
-
-      <div id="duck-hunt-root" class="duck-hunt-game"></div>
+      <div id="pong-root" class="pong-game"></div>
     </div>
   `,
   styles: [`
     .game-wrapper {
-      position: relative;
-      width: 100vw;
-      height: 100vh;
-      background: black;
-      overflow: hidden;
+      position: relative; width: 100vw; height: 100vh; background: #000; overflow: hidden;
     }
-    .duck-hunt-game { width: 100%; height: 100%; }
+    .pong-game {
+      width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;
+    }
     .back-btn {
       position: absolute; top: 20px; left: 20px; z-index: 1000;
       display: flex; align-items: center; gap: 10px;
@@ -46,20 +41,14 @@ import { LoaderComponent } from '../../shared/loader'; // 👈 Import Loader
     }
   `]
 })
-export class Duck implements AfterViewInit, OnDestroy {
+export class Pong implements AfterViewInit, OnDestroy {
   readonly ArrowLeft = ArrowLeft;
-  isLoading = true; // 👈 Default to loading
-
+  isLoading = true;
+  
   ngAfterViewInit() {
-    // ⏳ Wait 3 Seconds
     setTimeout(() => {
       this.isLoading = false;
-
-      // ⚡ Tiny delay to let Angular render the <div id="root">
-      setTimeout(() => {
-        startDuckHunter('duck-hunt-root');
-      }, 50);
-      
+      setTimeout(() => startPong('pong-root'), 50);
     }, 3000);
   }
 

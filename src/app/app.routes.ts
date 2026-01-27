@@ -9,6 +9,7 @@ import { IntroComponent } from './intro/intro';
 import { TutorialComponent } from './tutorial/tutorial';
 import { Duck } from './games/duck/duck';
 import { Tetris } from './games/tetris/tetris';
+import { Pong } from './games/pong/pong';
 
 export const routes: Routes = [
   {
@@ -39,6 +40,7 @@ export const routes: Routes = [
   { path: 'games', component: Games },
   { path: 'games/duck', component: Duck },
   { path: 'games/tetris', component: Tetris },
+  { path: 'games/pong', component: Pong },
   { path: 'matrix', component: MatrixEffectComponent },
   { path: 'settings', component: SettingsComponent },
 

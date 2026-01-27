@@ -1,5 +1,6 @@
 <div class="home-container">
 
+  <!-- Keep Home button as SPA navigation (optional, or change to href if you want that to refresh too) -->
   <a routerLink="/home" class="home-btn" title="Back to System">
     <lucide-icon [img]="Icons.home" size="24"></lucide-icon>
   </a>
@@ -9,24 +10,22 @@
   <p class="system-subtitle">Select a game to play</p>
 
   <div class="menu-grid">
-    <a routerLink="/games/duck" class="menu-card">
+    <!-- 🟢 CHANGED: routerLink -> href (Forces Reload) -->
+    <a href="/games/duck" class="menu-card">
       <lucide-icon [img]="Icons.duck" size="80"></lucide-icon>
       <span>Duck Hunt</span>
     </a>
 
-    <a routerLink="/games/tetris" class="menu-card">
+    <!-- 🟢 CHANGED: routerLink -> href (Forces Reload) -->
+    <a href="/games/tetris" class="menu-card">
       <lucide-icon [img]="Icons.tetris" size="80"></lucide-icon>
       <span>Tetris</span>
     </a>
 
-    <a routerLink="/games/snake" class="menu-card">
-      <lucide-icon [img]="Icons.snake" size="80"></lucide-icon>
-      <span>Snake</span>
-    </a>
-
-    <a routerLink="/games/pacman" class="menu-card">
-      <lucide-icon [img]="Icons.pacman" size="80"></lucide-icon>
-      <span>Pac-Man</span>
+    <!-- 🟢 CHANGED: routerLink -> href (Forces Reload) -->
+    <a href="/games/pong" class="menu-card">
+      <lucide-icon [img]="Icons.pong" size="80"></lucide-icon>
+      <span>Pong</span>
     </a>
   </div>
 </div>

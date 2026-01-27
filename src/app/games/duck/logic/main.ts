@@ -122,12 +122,21 @@ function setupGameScene() {
     k.add([k.sprite("background"), k.pos(0, -10), k.z(1)]);
 
     // UI: Score & Round
-    const score = k.add([k.text(formatScore(0, 6), { font: "nes", size: 8 }), k.pos(192, 197), k.z(2)]);
-    const roundCount = k.add([k.text("1", { font: "nes", size: 8 }), k.pos(42, 182), k.z(2), k.color(COLORS.RED)]);
+    const score = k.add([k.text(formatScore(0, 6), { font: "nes", size: 8 }), k.pos(192, 197), k.z(20)]);
+    const roundCount = k.add([k.text("1", { font: "nes", size: 8 }), k.pos(42, 182), k.z(20), k.color(COLORS.RED)]);
 
-    // Duck Icons
-    const duckIcons = k.add([k.pos(95, 198)]);
-    for (let i = 0, x = 1; i < 10; i++, x += 8) duckIcons.add([k.rect(7, 9), k.pos(x, 0), `duckIcon-${i}`]);
+    // 🛠️ FIX: Duck Icons
+    // 1. Added k.z(20) so they appear ON TOP of the background
+    // 2. Added k.color(255, 255, 255) so they are visible (White) initially
+    const duckIcons = k.add([k.pos(95, 198), k.z(20)]);
+    for (let i = 0, x = 1; i < 10; i++, x += 8) {
+      duckIcons.add([
+        k.rect(7, 9),
+        k.pos(x, 0),
+        k.color(255, 255, 255), // White by default
+        `duckIcon-${i}`
+      ]);
+    }
 
     // Bullet UI
     const bulletUIMask = k.add([k.rect(0, 8), k.pos(25, 198), k.z(2), k.color(0, 0, 0)]);
@@ -215,7 +224,7 @@ function setupGameStateControllers(score: any, roundCount: any, duckIcons: any, 
       k.setData("best-score", { value: gameManager.currentScore });
     }
     gameManager.nbDucksShotInRound = 0;
-    for (const duckIcon of duckIcons.children) (duckIcon as any)["color"] = k.color(255, 255, 255);
+    for (const duckIcon of duckIcons.children) (duckIcon as any)["color"] = k.color(255, 0, 0);
     gameManager.enterState("round-start");
   });
 
