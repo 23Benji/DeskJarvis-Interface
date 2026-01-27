@@ -8,6 +8,7 @@ import { SettingsComponent } from './settings/settings';
 import { IntroComponent } from './intro/intro';
 import { TutorialComponent } from './tutorial/tutorial';
 import { Duck } from './games/duck/duck';
+import { Tetris } from './games/tetris/tetris';
 
 export const routes: Routes = [
   {
@@ -37,6 +38,7 @@ export const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent },
   { path: 'games', component: Games },
   { path: 'games/duck', component: Duck },
+  { path: 'games/tetris', component: Tetris },
   { path: 'matrix', component: MatrixEffectComponent },
   { path: 'settings', component: SettingsComponent },
 
