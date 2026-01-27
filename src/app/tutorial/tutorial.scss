@@ -1,111 +1,138 @@
 .tutorial-container {
-  min-height: 100vh; /* Use min-height to allow scrolling if needed */
+  /* 🔒 LOCK TO SCREEN */
+  height: 100vh;
   width: 100vw;
+  overflow: hidden; /* Disable scrolling */
+
   background: #0a0a0a;
   color: white;
+  font-family: 'Orbitron', sans-serif;
+
+  /* 📐 VERTICAL LAYOUT */
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-family: 'Orbitron', sans-serif;
-  animation: fadeIn 1s ease-in;
-  padding: 20px;
+  justify-content: space-between; /* Distribute space evenly */
+  padding: 2vh 2vw; /* Small dynamic padding */
   box-sizing: border-box;
+
+  animation: fadeIn 1s ease-in;
+}
+
+/* 🟢 COMPACT HEADER */
+.header-section {
+  text-align: center;
+  flex-shrink: 0; /* Don't shrink the title */
+  margin-bottom: 2vh;
 }
 
 .title {
-  font-size: 2.5rem;
-  margin-bottom: 0.5rem;
+  font-size: 2.2rem;
+  margin: 0;
   text-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
-  text-align: center;
 }
 
 .subtitle {
   color: #888;
-  margin-bottom: 3rem;
-  letter-spacing: 1px;
-  text-align: center;
+  font-size: 1rem;
+  margin: 5px 0 0 0;
+  letter-spacing: 2px;
 }
 
+/* 🟢 FLEXIBLE CARD ROW */
 .cards-wrapper {
   display: flex;
-  gap: 20px;
-  margin-bottom: 3rem;
-  flex-wrap: wrap;
+  flex-direction: row; /* Force side-by-side */
   justify-content: center;
-  max-width: 1200px;
+  align-items: stretch; /* Make all cards same height */
+  gap: 1.5vw; /* Dynamic gap */
+  width: 100%;
+  max-width: 1600px;
+  flex-grow: 1; /* Take up all available middle space */
+  max-height: 60vh; /* Limit height so they don't get too tall */
 }
 
+/* 🟢 ADAPTIVE CARDS */
 .card {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 25px;
   border-radius: 15px;
-  width: 220px;
-  text-align: center;
-  transition: transform 0.3s ease;
+  padding: 2vh 1vw; /* Dynamic padding */
+
+  flex: 1; /* Grow/Shrink equally */
+  min-width: 0; /* Allow shrinking below content size if needed */
+  max-width: 250px; /* Cap width */
+
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center; /* Center content vertically */
+  text-align: center;
+
+  transition: transform 0.3s ease, background 0.3s;
 }
 
 .card:hover {
-  transform: translateY(-10px);
+  transform: translateY(-5px);
   border-color: #00ffff;
   background: rgba(0, 255, 255, 0.08);
   box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
 }
 
+/* 🟢 SCALABLE ICONS */
 .icon-circle {
   background: rgba(0, 255, 255, 0.1);
-  width: 60px;
-  height: 60px;
+  width: 50px;  /* Slightly smaller */
+  height: 50px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 15px;
+  margin-bottom: 1.5vh;
   color: #00ffff;
+  flex-shrink: 0;
 }
 
 .card h3 {
-  margin: 0 0 10px 0;
-  font-size: 1.2rem;
+  margin: 0 0 1vh 0;
+  font-size: 1.1rem;
   color: white;
 }
 
-/* 🟢 NEW: Highlights the hand gesture */
 .gesture-instruction {
   color: #00ffff;
   font-weight: bold;
-  font-size: 0.9rem;
-  margin-bottom: 8px;
+  font-size: 0.85rem;
+  margin-bottom: 0.5vh;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
 
 .desc {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: #aaa;
-  line-height: 1.4;
+  line-height: 1.3;
   font-family: sans-serif;
+  margin: 0;
 }
 
-/* Button Styling */
+/* 🟢 BOTTOM BUTTON */
 .finish-btn {
+  flex-shrink: 0; /* Don't shrink button */
   background: transparent;
   border: 1px solid #00ffff;
   color: #00ffff;
-  padding: 15px 40px;
+  padding: 12px 40px;
   border-radius: 30px;
   font-family: 'Orbitron', sans-serif;
-  font-size: 1.1rem;
+  font-size: 1rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 10px;
   transition: all 0.3s ease;
-  margin-top: 20px;
+  margin-top: 2vh;
+  margin-bottom: 2vh;
 }
 
 .finish-btn:hover {

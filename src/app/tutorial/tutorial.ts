@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-// 👇 Added specific icons for gestures
-import { LucideAngularModule, MousePointer2, Hand, Grab, ChevronsUpDown, CheckCircle2, ScanFace } from 'lucide-angular';
+import { LucideAngularModule, MousePointer2, ScanFace, Grab, CheckCircle2, PanelRight, Hand } from 'lucide-angular';
 
 @Component({
   selector: 'app-tutorial',
@@ -14,10 +13,11 @@ import { LucideAngularModule, MousePointer2, Hand, Grab, ChevronsUpDown, CheckCi
 export class TutorialComponent {
   readonly Icons = {
     move: MousePointer2,
-    click: ScanFace, // Represents "Pinch" focus
-    drag: Grab,
-    scroll: ChevronsUpDown,
-    finish: CheckCircle2
+    click: ScanFace,
+    drag: Grab, // Using Grab for Drag
+    enter: Hand, // Using Hand (or Grab) to represent the Fist/Interaction
+    finish: CheckCircle2,
+    toolbox: PanelRight
   };
 
   constructor(private router: Router) {}

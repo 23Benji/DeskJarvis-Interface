@@ -1,13 +1,14 @@
 <div class="tutorial-container">
 
-  <h1 class="title">NEURAL LINK ACTIVE</h1>
-  <p class="subtitle">Hand Gesture Control System</p>
+  <div class="header-section">
+    <h1 class="title">NEURAL LINK ACTIVE</h1>
+    <p class="subtitle">Hand Gesture Control System</p>
+  </div>
 
   <div class="cards-wrapper">
-
     <div class="card">
       <div class="icon-circle">
-        <lucide-icon [img]="Icons.move" size="40"></lucide-icon>
+        <lucide-icon [img]="Icons.move" size="32"></lucide-icon>
       </div>
       <h3>Cursor</h3>
       <p class="gesture-instruction">Index Finger Up</p>
@@ -16,7 +17,7 @@
 
     <div class="card">
       <div class="icon-circle">
-        <lucide-icon [img]="Icons.click" size="40"></lucide-icon>
+        <lucide-icon [img]="Icons.click" size="32"></lucide-icon>
       </div>
       <h3>Left Click</h3>
       <p class="gesture-instruction">Pinch Index & Thumb</p>
@@ -25,11 +26,29 @@
 
     <div class="card">
       <div class="icon-circle">
-        <lucide-icon [img]="Icons.drag" size="40"></lucide-icon>
+        <lucide-icon [img]="Icons.drag" size="32"></lucide-icon>
       </div>
       <h3>Drag & Drop</h3>
       <p class="gesture-instruction">Hold Pinch & Move</p>
       <p class="desc">Keep fingers pinched while moving to drag windows.</p>
+    </div>
+
+    <div class="card">
+      <div class="icon-circle">
+        <lucide-icon [img]="Icons.drag" size="32"></lucide-icon>
+      </div>
+      <h3>Enter / Confirm</h3>
+      <p class="gesture-instruction">Close All Fingers</p>
+      <p class="desc">Make a fist to trigger the 'Enter' key or confirm actions.<br>(Tetris Game Only) </p>
+    </div>
+
+    <div class="card">
+      <div class="icon-circle">
+        <lucide-icon [img]="Icons.toolbox" size="32"></lucide-icon>
+      </div>
+      <h3>Toolbox</h3>
+      <p class="gesture-instruction">Hover Right (Dashboard)</p>
+      <p class="desc">In the Dashboard, move cursor to the far right to reveal widgets.</p>
     </div>
 
   </div>
