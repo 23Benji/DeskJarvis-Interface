@@ -12,10 +12,10 @@ export class MusicPlayerComponent {
   @ViewChild('audioPlayer') audioRef!: ElementRef<HTMLAudioElement>;
 
   playlist = [
-    { title: 'Mood Remix', artist: 'Desk Jarvis', src: '/src/assets/music/track1.mp3' },
-    { title: 'Calm Down', artist: 'Desk Jarvis', src: '/src/assets/music/track2.mp3' },
-    { title: 'Gangstas Paradise', artist: 'feat. L.V.', src: '/src/assets/music/track3.mp3' },
-    { title: 'A Million Dreams', artist: 'Unknown', src: '/src/assets/music/track4.mp3' }
+    { title: 'Mood Remix', artist: 'Desk Jarvis', src: '/assets/music/track1.mp3' },
+    { title: 'Calm Down', artist: 'Desk Jarvis', src: '/assets/music/track2.mp3' },
+    { title: 'Gangstas Paradise', artist: 'feat. L.V.', src: '/assets/music/track3.mp3' },
+    { title: 'A Million Dreams', artist: 'Unknown', src: '/assets/music/track4.mp3' }
   ];
 
   index = 0;

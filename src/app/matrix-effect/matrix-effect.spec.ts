@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MatrixEffect } from './matrix-effect';
+import { MatrixEffectComponent } from './matrix-effect';
 
 describe('MatrixEffect', () => {
-  let component: MatrixEffect;
-  let fixture: ComponentFixture<MatrixEffect>;
+  let component: MatrixEffectComponent;
+  let fixture: ComponentFixture<MatrixEffectComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MatrixEffect]
+      imports: [MatrixEffectComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(MatrixEffect);
+    fixture = TestBed.createComponent(MatrixEffectComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

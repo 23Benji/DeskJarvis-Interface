@@ -1,12 +1,6 @@
 <div class="clock-widget">
   <div class="menu-bar">
-    <button class="menu-icon" (click)="toggleMenu()">
-      <lucide-icon [img]="MenuIcon" size="20"></lucide-icon>
-    </button>
 
-    <div class="clock-title">
-      {{ activeTab | titlecase }}
-    </div>
 
     <div class="dropdown-menu" *ngIf="menuOpen">
       <button *ngFor="let tab of ['clock', 'stopwatch', 'timer', 'pomodoro']"
@@ -18,7 +12,9 @@
   </div>
 
   <div class="clock-display">
-
+    <button class="menu-icon" (click)="toggleMenu()">
+      <lucide-icon [img]="MenuIcon" size="20"></lucide-icon>
+    </button>
     <div *ngIf="activeTab === 'clock'">
       {{ time | date:'mediumTime' }}
     </div>

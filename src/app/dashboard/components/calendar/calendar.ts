@@ -6,33 +6,59 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './calendar.html',
-  styleUrl: './calendar.scss'
+  styleUrl: './calendar.scss' // Make sure this matches your file (.css or .scss)
 })
 export class CalendarComponent implements OnInit {
-  calendarGrid: any[][] = [];
-  monthInfo: string = '';
-  currentDay: number = new Date().getDate();
+  currentDate = new Date();
+  calendarGrid: (string | number | null)[][] = [];
+  monthInfo = '';
+  currentDay: number = 0;
 
   ngOnInit() {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = now.toLocaleString('default', { month: 'long' });
-    const daysInMonth = new Date(year, now.getMonth() + 1, 0).getDate();
-    const firstDay = new Date(year, now.getMonth(), 1).getDay();
+    this.generateCalendar();
+  }
 
-    const days = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
-    const grid: any[] = [];
-    let week: any[] = new Array(firstDay).fill(null);
+  generateCalendar() {
+    const year = this.currentDate.getFullYear();
+    const month = this.currentDate.getMonth();
 
-    for (let d = 1; d <= daysInMonth; d++) {
-      week.push(d);
-      if (week.length === 7 || d === daysInMonth) {
-        grid.push(week);
+    // 🟢 FIX: Force 'en-US' to ensure "January" instead of "Gennaio"
+    this.monthInfo = this.currentDate.toLocaleString('en-US', { month: 'long', year: 'numeric' });
+
+    this.currentDay = this.currentDate.getDate();
+
+    const firstDayOfMonth = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    let weeks: (string | number | null)[][] = [];
+    let week: (string | number | null)[] = [];
+
+    // Add headers (English)
+    const headers = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
+    weeks.push(headers);
+
+    // Add empty slots for days before the 1st
+    for (let i = 0; i < firstDayOfMonth; i++) {
+      week.push(null);
+    }
+
+    // Add days
+    for (let day = 1; day <= daysInMonth; day++) {
+      week.push(day);
+      if (week.length === 7) {
+        weeks.push(week);
         week = [];
       }
     }
 
-    this.monthInfo = `${month.toUpperCase()} ${year}`;
-    this.calendarGrid = [days, ...grid];
+    // Fill remaining slots in the last week
+    if (week.length > 0) {
+      while (week.length < 7) {
+        week.push(null);
+      }
+      weeks.push(week);
+    }
+
+    this.calendarGrid = weeks;
   }
 }

@@ -1,9 +1,12 @@
 <div class="notes-widget">
-  <h3 class="notes-title">Notes</h3>
   <div class="notes-container">
     <ul>
       <li *ngFor="let note of notes">
-        <strong>{{ note.title }}</strong> — {{ note.description }}
+        <strong style="color: white; display: block; margin-bottom: 4px;">
+          {{ note.title }}
+        </strong>
+
+        <span style="color: #aaa;">{{ note.description }}</span>
       </li>
     </ul>
   </div>

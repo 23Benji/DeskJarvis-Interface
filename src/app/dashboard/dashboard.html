@@ -28,13 +28,6 @@
     <app-calendar></app-calendar>
   </div>
 
-  <div *ngIf="widgets['todo']" class="widget" cdkDrag
-       style="position: absolute; top: 40%; right: 3%;">
-    <div class="drag-handle" cdkDragHandle></div>
-    <button class="hide-btn" (click)="hideWidget('todo')">×</button>
-    <app-to-do></app-to-do>
-  </div>
-
   <div *ngIf="widgets['notes']" class="widget" cdkDrag
        style="position: absolute; top: 10%; left: 5%;">
     <div class="drag-handle" cdkDragHandle></div>
@@ -50,7 +43,7 @@
   </div>
 
   <div *ngIf="widgets['image']" class="widget" cdkDrag
-       style="position: absolute; top: 10%; left: 25%;">
+       style="position: absolute; top: 50%; right: 10%;">
     <div class="drag-handle" cdkDragHandle></div>
     <button class="hide-btn" (click)="hideWidget('image')">×</button>
     <app-resizable-image-widget></app-resizable-image-widget>

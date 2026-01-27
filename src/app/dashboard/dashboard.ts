@@ -9,7 +9,6 @@ import { AiWidgetComponent } from './components/ai-widget/ai-widget';
 import { ClockComponent } from './components/clock/clock';
 import { WeatherComponent } from './components/weather/weather';
 import { CalendarComponent } from './components/calendar/calendar';
-import { ToDoComponent } from './components/to-do/to-do';
 import { NotesComponent } from './components/notes/notes';
 import { MusicPlayerComponent } from './components/music-player/music-player';
 import { ResizableImageWidgetComponent } from './components/resizable-image-widget/resizable-image-widget';
@@ -26,7 +25,6 @@ import { ResizableImageWidgetComponent } from './components/resizable-image-widg
     ClockComponent,
     WeatherComponent,
     CalendarComponent,
-    ToDoComponent,
     NotesComponent,
     MusicPlayerComponent,
     ResizableImageWidgetComponent
@@ -40,7 +38,6 @@ export class DashboardComponent {
     clock: true,
     weather: false,
     calendar: false,
-    todo: false,
     notes: false,
     music: false,
     image: false,
@@ -53,7 +50,6 @@ export class DashboardComponent {
     clock: Clock,
     weather: Cloud,
     calendar: Calendar,
-    todo: CheckSquare,
     notes: StickyNote,
     music: Music,
     image: ImageIcon,

@@ -1,10 +1,11 @@
 <div class="calendar-widget">
-  <h3 class="widget-title">Calendar</h3>
   <div class="calendar-grid">
     <div *ngFor="let week of calendarGrid" class="calendar-row">
       <ng-container *ngFor="let day of week">
 
-        <span *ngIf="day && (day !== 'SU' && day !== 'MO' && day !== 'TU')"
+        <span *ngIf="day &&
+                     day !== 'SU' && day !== 'MO' && day !== 'TU' &&
+                     day !== 'WE' && day !== 'TH' && day !== 'FR' && day !== 'SA'"
               class="calendar-day"
               [class.today]="day === currentDay">
           {{ day | number:'2.0' }}

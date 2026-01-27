@@ -14,19 +14,26 @@ export class ToDoComponent implements OnInit {
   tasks: any[] = [];
 
   ngOnInit() {
+    // 1. Try to load from memory
     const saved = localStorage.getItem('todoData');
     if (saved) {
       this.tasks = JSON.parse(saved);
-    } else {
-      // 👈 Use HttpClient and leading slash
-      this.http.get<any[]>('/assets/data/todo.json').subscribe({
-        next: (data) => {
-          this.tasks = data;
-          this.save();
-        },
-        error: (err) => console.error('Error loading todo:', err)
-      });
     }
+
+    // 2. If memory was empty (or didn't exist), force load from JSON
+    if (this.tasks.length === 0) {
+      this.loadDefaults();
+    }
+  }
+
+  loadDefaults() {
+    this.http.get<any[]>('/assets/data/todo.json').subscribe({
+      next: (data) => {
+        this.tasks = data;
+        this.save(); // Save these defaults immediately
+      },
+      error: (err) => console.error('Error loading todo:', err)
+    });
   }
 
   handleCheck(id: number) {
@@ -41,6 +48,7 @@ export class ToDoComponent implements OnInit {
   }
 
   get visibleTasks() {
+    // Only show tasks that are NOT done (0)
     return this.tasks.filter((t) => t.done === 0);
   }
 }

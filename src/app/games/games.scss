@@ -116,3 +116,49 @@
   transform: scale(1.1);
   color: #00ffff;
 }
+/* 🏠 GLOBAL HOME BUTTON STYLES */
+.home-btn {
+  position: absolute; /* or fixed, depending on your layout preference */
+  top: 0;
+  left: 0;
+  z-index: 2000; /* High z-index to be on top of everything */
+
+  /* 📐 SHAPE: Quarter Circle */
+  width: 100px;  /* Big clickable area */
+  height: 100px;
+  background: rgba(0, 0, 0, 0.3); /* Subtle dark background */
+  border-radius: 0 0 100% 0; /* Curve the bottom-right corner */
+
+  /* 🎨 ICON POSITIONING */
+  display: flex;
+  align-items: flex-start; /* Push icon to top */
+  justify-content: flex-start; /* Push icon to left */
+  padding-top: 20px;  /* Space from top edge */
+  padding-left: 20px; /* Space from left edge */
+  box-sizing: border-box; /* Ensures padding doesn't increase size */
+
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none; /* No underline */
+  backdrop-filter: blur(5px); /* Cool glass effect */
+}
+
+/* HOVER EFFECT */
+.home-btn:hover {
+  width: 110px;  /* Expands slightly */
+  height: 110px;
+  background: rgba(0, 255, 255, 0.15); /* Cyan tint */
+  color: #00ffff8b;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+}
+
+/* Icon specific tweak to keep it crisp */
+.home-btn lucide-icon {
+  transition: transform 0.3s ease;
+}
+
+.home-btn:hover lucide-icon {
+  transform: scale(1.2); /* Icon grows */
+}
+
