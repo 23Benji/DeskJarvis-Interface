@@ -2,7 +2,7 @@ import { Component, AfterViewInit, OnDestroy } from '@angular/core';
 import { startDuckHunter } from './logic/main'; // path to your main.ts wrapper
 
 @Component({
-  selector: 'app-duck',
+  selector: 'duck',
   template: `<div id="duck-hunt-root" class="duck-hunt-game"></div>`,
   styles: [`
     .duck-hunt-game {

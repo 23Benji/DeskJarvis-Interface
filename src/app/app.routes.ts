@@ -7,6 +7,7 @@ import { MatrixEffectComponent } from './matrix-effect/matrix-effect';
 import { SettingsComponent } from './settings/settings';
 import { IntroComponent } from './intro/intro';
 import { TutorialComponent } from './tutorial/tutorial';
+import { Duck } from './games/duck/duck';
 
 export const routes: Routes = [
   {
@@ -35,6 +36,7 @@ export const routes: Routes = [
   { path: 'home', component: HomescreenComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'games', component: Games },
+  { path: 'games/duck', component: Duck },
   { path: 'matrix', component: MatrixEffectComponent },
   { path: 'settings', component: SettingsComponent },
 
