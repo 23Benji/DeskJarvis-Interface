@@ -38,7 +38,29 @@ function setupScenes() {
   k.scene("game", () => {
     gameManager.reset();
 
+    let hoverPaused = false;
+    let blurPaused = false;
+    let manualPaused = false;
+
+    const applyPause = () => {
+      gameManager.isGamePaused = hoverPaused || blurPaused || manualPaused;
+    };
+
+    const onBlur = () => { blurPaused = true; applyPause(); };
+    const onFocus = () => { blurPaused = false; applyPause(); };
+    window.addEventListener('blur', onBlur);
+    window.addEventListener('focus', onFocus);
+    k.onSceneLeave(() => {
+      window.removeEventListener('blur', onBlur);
+      window.removeEventListener('focus', onFocus);
+    });
+
     // -- UI --
+    k.add([
+      k.rect(2, k.height()),
+      k.pos(-2, 0),
+      k.color(100, 100, 100)
+    ]);
     k.add([
       k.rect(2, k.height()),
       k.pos(BOARD_WIDTH * BLOCK_SIZE, 0),
@@ -66,9 +88,21 @@ function setupScenes() {
 
     // -- GAME LOOP + INPUT --
     k.onUpdate(() => {
-      if (gameManager.isGameOver) return;
+      if (gameManager.isGameOver || gameManager.isGamePaused) {
+        const mPos = k.mousePos();
+        hoverPaused = mPos.x < 110 && mPos.y < 110;
+        applyPause();
+        return;
+      }
 
       const mPos = k.mousePos();
+      const isOverButton = mPos.x < 110 && mPos.y < 110;
+      if (hoverPaused !== isOverButton) {
+        hoverPaused = isOverButton;
+        applyPause();
+        if (hoverPaused) return;
+      }
+      
       const logicMouseX = Math.min(Math.max(0, mPos.x), BOARD_WIDTH * BLOCK_SIZE);
       
       let targetCol = Math.floor(logicMouseX / BLOCK_SIZE);
@@ -105,11 +139,16 @@ function setupScenes() {
         k.go("game");
         return;
       }
+      if (gameManager.isGamePaused) {
+        manualPaused = false;
+        applyPause();
+        return;
+      }
       rotatePiece(currentPiece);
     });
 
     k.onKeyPress("enter", () => {
-      if (gameManager.isGameOver) return;
+      if (gameManager.isGameOver || gameManager.isGamePaused) return;
       while (!checkCollision(currentPiece, 0, 1)) {
         currentPiece.y++;
       }
@@ -117,6 +156,9 @@ function setupScenes() {
       currentPiece = spawnPiece();
       if (checkCollision(currentPiece)) gameOver();
     });
+
+    k.onKeyPress("p", () => { manualPaused = !manualPaused; applyPause(); });
+    k.onKeyPress("escape", () => { manualPaused = !manualPaused; applyPause(); });
 
     // -- DRAWING --
     k.onDraw(() => {
@@ -247,8 +289,54 @@ function drawMatrix(matrix: any[][], offsetX: number, offsetY: number, colorHex:
   });
 }
 
+function togglePause() {
+  if (gameManager.isGameOver) return;
+  const root = k.getTreeRoot();
+  root.paused = !root.paused;
+  gameManager.isGamePaused = root.paused;
+
+  if (root.paused) {
+    k.add([
+      k.rect(k.width(), k.height()),
+      k.color(0, 0, 0),
+      k.opacity(0.7),
+      "pause-overlay"
+    ]);
+    k.add([
+      k.text("PAUSED", { size: 32 }),
+      k.anchor("center"),
+      k.pos(k.width() / 2, k.height() / 2 - 20),
+      k.color(255, 255, 255),
+      "pause-text"
+    ]);
+    k.add([
+      k.text("Press P or ESC to resume", { size: 14 }),
+      k.anchor("center"),
+      k.pos(k.width() / 2, k.height() / 2 + 20),
+      k.color(200, 200, 200),
+      "pause-hint"
+    ]);
+  } else {
+    const overlay = k.get("pause-overlay")[0];
+    if (overlay) k.destroy(overlay);
+    const text = k.get("pause-text")[0];
+    if (text) k.destroy(text);
+    const hint = k.get("pause-hint")[0];
+    if (hint) k.destroy(hint);
+  }
+}
+
 function gameOver() {
   gameManager.isGameOver = true;
+  if (gameManager.isGamePaused) {
+    const overlay = k.get("pause-overlay")[0];
+    if (overlay) k.destroy(overlay);
+    const text = k.get("pause-text")[0];
+    if (text) k.destroy(text);
+    const hint = k.get("pause-hint")[0];
+    if (hint) k.destroy(hint);
+    gameManager.isGamePaused = false;
+  }
   k.add([
       k.text("GAME OVER", { size: 32 }),
       k.anchor("center"),

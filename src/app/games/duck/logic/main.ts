@@ -117,6 +117,23 @@ function setupGameScene() {
   k.scene("game", () => {
     k.setCursor("none");
 
+    let hoverPaused = false;
+    let blurPaused = false;
+    let manualPaused = false;
+
+    const applyPause = () => {
+      gameManager.isGamePaused = hoverPaused || blurPaused || manualPaused;
+    };
+
+    const onBlur = () => { blurPaused = true; applyPause(); };
+    const onFocus = () => { blurPaused = false; applyPause(); };
+    window.addEventListener('blur', onBlur);
+    window.addEventListener('focus', onFocus);
+    k.onSceneLeave(() => {
+      window.removeEventListener('blur', onBlur);
+      window.removeEventListener('focus', onFocus);
+    });
+
     // Background
     k.add([k.rect(k.width(), k.height()), k.color(COLORS.BLUE), "sky"]);
     k.add([k.sprite("background"), k.pos(0, -10), k.z(1)]);
@@ -160,6 +177,12 @@ function setupGameScene() {
 
     // Update
     k.onUpdate(() => {
+      const mPos = k.mousePos();
+      const isOverButton = mPos.x < 110 && mPos.y < 110;
+      if (hoverPaused !== isOverButton) {
+        hoverPaused = isOverButton;
+        applyPause();
+      }
       score.text = formatScore(gameManager.currentScore, 6);
       bulletUIMask.width = [0, 8, 15, 22][Math.max(0, 3 - gameManager.nbBulletsLeft)] ?? 22;
       cursor.moveTo(k.mousePos());
@@ -173,8 +196,13 @@ function setupGameScene() {
     });
 
     // Pause
-    k.onKeyPress((key: string) => {
-      if (key === "p") togglePause();
+    k.onKeyPress("p", () => { manualPaused = !manualPaused; applyPause(); });
+    k.onKeyPress("escape", () => { manualPaused = !manualPaused; applyPause(); });
+    k.onClick(() => {
+      if (gameManager.isGamePaused) {
+        manualPaused = false;
+        applyPause();
+      }
     });
   });
 }
@@ -188,12 +216,35 @@ function togglePause() {
   if (root.paused) {
     //@ts-ignore
     if(window.audioCtx) window.audioCtx.suspend();
-    k.add([k.text("PAUSED", { font: "nes", size: 8 }), k.pos(5, 5), k.z(3), "paused-text"]);
+    k.add([
+      k.rect(k.width(), k.height()),
+      k.color(0, 0, 0),
+      k.opacity(0.7),
+      "pause-overlay"
+    ]);
+    k.add([
+      k.text("PAUSED", { font: "nes", size: 12 }),
+      k.anchor("center"),
+      k.pos(k.width() / 2, k.height() / 2 - 10),
+      k.color(255, 255, 255),
+      "pause-text"
+    ]);
+    k.add([
+      k.text("Press P or ESC to resume", { font: "nes", size: 6 }),
+      k.anchor("center"),
+      k.pos(k.width() / 2, k.height() / 2 + 10),
+      k.color(200, 200, 200),
+      "pause-hint"
+    ]);
   } else {
     //@ts-ignore
     if(window.audioCtx) window.audioCtx.resume();
-    const pausedText = k.get("paused-text")[0];
-    if (pausedText) k.destroy(pausedText);
+    const overlay = k.get("pause-overlay")[0];
+    if (overlay) k.destroy(overlay);
+    const text = k.get("pause-text")[0];
+    if (text) k.destroy(text);
+    const hint = k.get("pause-hint")[0];
+    if (hint) k.destroy(hint);
   }
 }
 

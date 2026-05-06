@@ -5,6 +5,7 @@ interface GameManager {
   score: number;
   level: number;
   isGameOver: boolean;
+  isGamePaused: boolean;
   board: (string | null)[][];
   reset(): void;
 }
@@ -16,11 +17,13 @@ export function initGameManager(): GameManager {
     score: 0,
     level: 1,
     isGameOver: false,
+    isGamePaused: false,
     board: [],
     reset() {
       this.score = 0;
       this.level = 1;
       this.isGameOver = false;
+      this.isGamePaused = false;
       this.board = Array.from({ length: BOARD_HEIGHT }, () => Array(BOARD_WIDTH).fill(null));
     }
   };
