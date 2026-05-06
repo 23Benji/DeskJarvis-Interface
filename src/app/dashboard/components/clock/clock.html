@@ -1,6 +1,7 @@
 <div class="clock-widget">
   <div class="menu-bar">
-    <div class="dropdown-menu" *ngIf="menuOpen">
+    <!-- Added stopPropagation so clicking inside the menu doesn't close it -->
+    <div class="dropdown-menu" *ngIf="menuOpen" (click)="$event.stopPropagation()">
       <button *ngFor="let tab of ['clock', 'stopwatch', 'timer', 'pomodoro']"
               (click)="switchTab(tab)"
               [class.active]="activeTab === tab">
@@ -10,12 +11,12 @@
   </div>
 
   <div class="clock-display">
-    <button class="menu-icon" (click)="toggleMenu()">
+    <!-- Pass $event to toggleMenu -->
+    <button class="menu-icon" (click)="toggleMenu($event)">
       <lucide-icon [img]="MenuIcon" size="20"></lucide-icon>
     </button>
 
     <div *ngIf="activeTab === 'clock'">
-      <!-- Changed from Angular Date Pipe to your custom getter -->
       {{ formattedTime }}
     </div>
 

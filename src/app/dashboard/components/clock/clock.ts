@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule, Menu } from 'lucide-angular';
 
@@ -97,8 +97,16 @@ export class ClockComponent implements OnInit, OnDestroy {
     this.clearActiveInterval();
   }
 
-  toggleMenu() {
+  // Stop propagation here so the document click listener doesn't immediately close it
+  toggleMenu(event: Event) {
+    event.stopPropagation();
     this.menuOpen = !this.menuOpen;
+  }
+
+  // Listens for clicks anywhere on the page to close the menu
+  @HostListener('document:click')
+  closeMenu() {
+    this.menuOpen = false;
   }
 
   // -- Start/Pause Logic --
