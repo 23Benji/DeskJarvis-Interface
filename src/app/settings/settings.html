@@ -5,8 +5,18 @@
 
   <h1>System Settings</h1>
 
-
   <div class="settings-panel">
+    <!-- NEW: Clock Format Setting -->
+    <div class="setting-item">
+      <span>Clock Format</span>
+      <button
+        class="toggle-btn"
+        (click)="toggleClockFormat()"
+        style="display: flex; align-items: center; gap: 5px;">
+        {{ clockFormatText }}
+      </button>
+    </div>
+
     <div class="setting-item">
       <span>System Guide</span>
       <a routerLink="/tutorial" class="toggle-btn" style="text-decoration: none; display: flex; align-items: center; gap: 5px;">

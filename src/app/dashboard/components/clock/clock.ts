@@ -21,6 +21,9 @@ export class ClockComponent implements OnInit, OnDestroy {
   pomodoro: number = 25 * 60;
   running: boolean = false;
 
+  // Clock format preference
+  use12HourFormat: boolean = true;
+
   // Intervals
   private clockInterval: any;
   private activeInterval: any;
@@ -29,16 +32,54 @@ export class ClockComponent implements OnInit, OnDestroy {
   readonly MenuIcon = Menu;
 
   ngOnInit() {
+    // Load clock format preference
+    this.loadClockFormatPreference();
+
     // Start the main clock tick immediately
     this.clockInterval = setInterval(() => {
       this.time = new Date();
     }, 1000);
+
+    // Listen for format changes from settings
+    window.addEventListener('clockFormatChanged', this.handleFormatChange);
   }
 
   ngOnDestroy() {
     // Cleanup intervals when widget is removed
     if (this.clockInterval) clearInterval(this.clockInterval);
     this.clearActiveInterval();
+
+    // Remove event listener
+    window.removeEventListener('clockFormatChanged', this.handleFormatChange);
+  }
+
+  // Load clock format from localStorage
+  private loadClockFormatPreference() {
+    const saved = localStorage.getItem('clockFormat');
+    this.use12HourFormat = saved === null ? true : saved === '12';
+  }
+
+  // Handle format change events
+  private handleFormatChange = (event: any) => {
+    this.use12HourFormat = event.detail.use12Hour;
+  };
+
+  // Format time based on user preference
+  get formattedTime(): string {
+    const hours = this.time.getHours();
+    const minutes = this.time.getMinutes().toString().padStart(2, '0');
+    const seconds = this.time.getSeconds().toString().padStart(2, '0');
+
+    if (this.use12HourFormat) {
+      // 12-hour format with AM/PM
+      const period = hours >= 12 ? 'PM' : 'AM';
+      const displayHours = hours % 12 || 12; // Convert 0 to 12 for midnight
+      return `${displayHours}:${minutes}:${seconds} ${period}`;
+    } else {
+      // 24-hour format
+      const displayHours = hours.toString().padStart(2, '0');
+      return `${displayHours}:${minutes}:${seconds}`;
+    }
   }
 
   // -- Helper to format seconds to MM:SS --
