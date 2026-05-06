@@ -1,8 +1,27 @@
 <div class="widget-content" [style.width.px]="width" [style.height.px]="height">
 
-  <img src="/assets/images/mountains.jpg"
-       alt="Displayed"
+  <div *ngIf="!uploadedFileUrl" class="upload-placeholder" (click)="fileInput.click()">
+    <lucide-icon [img]="UploadIcon" size="32"></lucide-icon>
+    <p>Click to Upload<br><small>(JPG, PNG, PDF)</small></p>
+  </div>
+
+  <input #fileInput
+         type="file"
+         accept="image/png, image/jpeg, application/pdf"
+         style="display: none"
+         (change)="onFileSelected($event)">
+
+  <img *ngIf="fileType === 'image'"
+       [src]="uploadedFileUrl"
+       (load)="onImageLoad($event)"
+       alt="Uploaded"
        style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px; pointer-events: none;">
+
+  <iframe *ngIf="fileType === 'pdf'"
+          [src]="safePdfUrl"
+          [style.pointer-events]="isResizing ? 'none' : 'auto'"
+          style="width: 100%; height: 100%; border: none; border-radius: 10px;">
+  </iframe>
 
   <div class="resize-grip" (mousedown)="startResize($event)"></div>
 </div>

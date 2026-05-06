@@ -1,54 +1,73 @@
-import { Component, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { LucideAngularModule, Upload } from 'lucide-angular';
 
 @Component({
   selector: 'app-resizable-image-widget',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LucideAngularModule],
   templateUrl: './resizable-image-widget.html',
   styleUrl: './resizable-image-widget.scss'
 })
-export class ResizableImageWidgetComponent implements AfterViewInit {
+export class ResizableImageWidgetComponent {
   width = 250;
   height = 250;
   isResizing = false;
 
+  // Upload State
+  uploadedFileUrl: string | null = null;
+  safePdfUrl: SafeResourceUrl | null = null;
+  fileType: 'image' | 'pdf' | null = null;
+  readonly UploadIcon = Upload;
+
   private startX = 0;
-  private startY = 0;
   private startWidth = 0;
-  private startHeight = 0;
   private aspectRatio = 1;
 
-  constructor(private el: ElementRef) {}
+  private sanitizer = inject(DomSanitizer);
 
-  ngAfterViewInit() {
-    const img = this.el.nativeElement.querySelector('img');
+  // --- UPLOAD LOGIC ---
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (!file) return;
 
-    if (img) {
-      if (img.complete && img.naturalWidth) {
-        this.setNativeRatio(img);
-      } else {
-        img.onload = () => this.setNativeRatio(img);
-      }
+    if (this.uploadedFileUrl) {
+      URL.revokeObjectURL(this.uploadedFileUrl);
+    }
+
+    const objectUrl = URL.createObjectURL(file);
+    this.uploadedFileUrl = objectUrl;
+
+    if (file.type === 'application/pdf') {
+      this.fileType = 'pdf';
+      // THE FIX: Added view=FitH to force the PDF to fit edge-to-edge horizontally!
+      this.safePdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(objectUrl + '#toolbar=0&navpanes=0&view=FitH');
+
+      // Standardize PDF ratio to roughly A4 size (1 : 1.414)
+      this.aspectRatio = 1 / 1.414;
+      this.height = this.width / this.aspectRatio;
+    } else if (file.type.startsWith('image/')) {
+      this.fileType = 'image';
     }
   }
 
-  private setNativeRatio(img: HTMLImageElement) {
+  onImageLoad(event: Event) {
+    const img = event.target as HTMLImageElement;
     if (img.naturalWidth && img.naturalHeight) {
       this.aspectRatio = img.naturalWidth / img.naturalHeight;
       this.height = this.width / this.aspectRatio;
     }
   }
 
+  // --- RESIZE LOGIC ---
   startResize(event: MouseEvent) {
     event.preventDefault();
     event.stopPropagation();
     this.isResizing = true;
 
     this.startX = event.clientX;
-    this.startY = event.clientY;
     this.startWidth = this.width;
-    this.startHeight = this.height;
 
     window.addEventListener('mousemove', this.onMouseMove);
     window.addEventListener('mouseup', this.onMouseUp);
@@ -58,31 +77,16 @@ export class ResizableImageWidgetComponent implements AfterViewInit {
     if (!this.isResizing) return;
 
     const dx = event.clientX - this.startX;
-    const dy = event.clientY - this.startY;
+    let newWidth = this.startWidth + dx;
 
-    // Project the mouse movement onto the image's diagonal for perfectly smooth scaling
-    const startDiag = Math.sqrt(this.startWidth * this.startWidth + this.startHeight * this.startHeight);
-
-    // Calculate the direction vectors
-    const ux = this.startWidth / startDiag;
-    const uy = this.startHeight / startDiag;
-
-    // Determine how far the mouse has moved along that diagonal line
-    const projectedDelta = (dx * ux) + (dy * uy);
-    const newDiag = startDiag + projectedDelta;
-
-    // Convert the new diagonal length back into width and height
-    let newWidth = newDiag * ux;
-    let newHeight = newDiag * uy;
-
-    // 🛑 THE FIX: Lowered the minimum limit to 40px so you can shrink it way down!
-    if (newWidth < 40) {
-      newWidth = 40;
-      newHeight = 40 / this.aspectRatio;
+    // Prevent it from getting impossibly small
+    if (newWidth < 100) {
+      newWidth = 100;
     }
 
+    // STRICT LOCK: Force height to obey the exact aspect ratio
     this.width = newWidth;
-    this.height = newHeight;
+    this.height = newWidth / this.aspectRatio;
   };
 
   onMouseUp = () => {

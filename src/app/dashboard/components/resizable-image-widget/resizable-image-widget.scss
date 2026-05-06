@@ -1,0 +1,42 @@
+/* Ensure the main container wraps the content cleanly */
+.widget-content {
+  position: relative;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* Added: Ensures the PDF doesn't cut past the rounded corners */
+}
+
+/* The clickable area to upload a file */
+.upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  color: #ffffff;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.upload-placeholder p {
+  margin-top: 10px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.9rem;
+  pointer-events: none;
+}
+
+.upload-placeholder small {
+  font-size: 0.7rem;
+  opacity: 0.7;
+}
+
+.upload-placeholder:hover {
+  background: rgba(189, 189, 189, 0.1);
+}
+
