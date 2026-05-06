@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ResizableImageWidget } from './resizable-image-widget';
+import { ResizableImageWidgetComponent } from './resizable-image-widget';
 
-describe('ResizableImageWidget', () => {
-  let component: ResizableImageWidget;
-  let fixture: ComponentFixture<ResizableImageWidget>;
+describe('ResizableImageWidgetComponent', () => {
+  let component: ResizableImageWidgetComponent;
+  let fixture: ComponentFixture<ResizableImageWidgetComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ResizableImageWidget]
+      imports: [ResizableImageWidgetComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ResizableImageWidget);
+    fixture = TestBed.createComponent(ResizableImageWidgetComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

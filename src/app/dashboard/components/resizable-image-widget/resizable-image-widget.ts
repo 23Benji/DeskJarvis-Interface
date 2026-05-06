@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './resizable-image-widget.html',
   styleUrl: './resizable-image-widget.scss'
 })
-export class ResizableImageWidgetComponent {
+export class ResizableImageWidgetComponent implements AfterViewInit {
   width = 250;
   height = 250;
   isResizing = false;
@@ -17,11 +17,32 @@ export class ResizableImageWidgetComponent {
   private startY = 0;
   private startWidth = 0;
   private startHeight = 0;
+  private aspectRatio = 1;
 
-  // When user clicks the resize grip
+  constructor(private el: ElementRef) {}
+
+  ngAfterViewInit() {
+    const img = this.el.nativeElement.querySelector('img');
+
+    if (img) {
+      if (img.complete && img.naturalWidth) {
+        this.setNativeRatio(img);
+      } else {
+        img.onload = () => this.setNativeRatio(img);
+      }
+    }
+  }
+
+  private setNativeRatio(img: HTMLImageElement) {
+    if (img.naturalWidth && img.naturalHeight) {
+      this.aspectRatio = img.naturalWidth / img.naturalHeight;
+      this.height = this.width / this.aspectRatio;
+    }
+  }
+
   startResize(event: MouseEvent) {
     event.preventDefault();
-    event.stopPropagation(); // Stop drag from interfering
+    event.stopPropagation();
     this.isResizing = true;
 
     this.startX = event.clientX;
@@ -29,25 +50,46 @@ export class ResizableImageWidgetComponent {
     this.startWidth = this.width;
     this.startHeight = this.height;
 
-    // Attach listeners to window so dragging works even if mouse leaves the widget
     window.addEventListener('mousemove', this.onMouseMove);
     window.addEventListener('mouseup', this.onMouseUp);
   }
 
-  // Using an arrow function to preserve 'this' context
   onMouseMove = (event: MouseEvent) => {
     if (!this.isResizing) return;
 
     const dx = event.clientX - this.startX;
     const dy = event.clientY - this.startY;
 
-    this.width = Math.max(100, this.startWidth + dx);
-    this.height = Math.max(100, this.startHeight + dy);
-  }
+    // Project the mouse movement onto the image's diagonal for perfectly smooth scaling
+    const startDiag = Math.sqrt(this.startWidth * this.startWidth + this.startHeight * this.startHeight);
+
+    // Calculate the direction vectors
+    const ux = this.startWidth / startDiag;
+    const uy = this.startHeight / startDiag;
+
+    // Determine how far the mouse has moved along that diagonal line
+    const projectedDelta = (dx * ux) + (dy * uy);
+    const newDiag = startDiag + projectedDelta;
+
+    // Convert the new diagonal length back into width and height
+    let newWidth = newDiag * ux;
+    let newHeight = newDiag * uy;
+
+    // 🛑 THE FIX: Lowered the minimum limit to 40px so you can shrink it way down!
+    if (newWidth < 40) {
+      newWidth = 40;
+      newHeight = 40 / this.aspectRatio;
+    }
+
+    this.width = newWidth;
+    this.height = newHeight;
+  };
 
   onMouseUp = () => {
-    this.isResizing = false;
-    window.removeEventListener('mousemove', this.onMouseMove);
-    window.removeEventListener('mouseup', this.onMouseUp);
-  }
+    if (this.isResizing) {
+      this.isResizing = false;
+      window.removeEventListener('mousemove', this.onMouseMove);
+      window.removeEventListener('mouseup', this.onMouseUp);
+    }
+  };
 }

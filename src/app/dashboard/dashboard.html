@@ -53,13 +53,14 @@
   </div>
 
   <div *ngIf="widgets['image']" class="widget" cdkDrag
-       [cdkDragFreeDragPosition]="positions['image'] || {x: 0, y: 0}"
-       (cdkDragEnded)="onDragEnded($event, 'image')"
-       style="position: absolute; top: 50%; right: 10%;">
-    <div class="drag-handle" cdkDragHandle></div>
-    <button class="hide-btn" (click)="hideWidget('image')">×</button>
-    <app-resizable-image-widget></app-resizable-image-widget>
-  </div>
+  [cdkDragFreeDragPosition]="positions['image'] || {x: 0, y: 0}"
+  (cdkDragEnded)="onDragEnded($event, 'image')"
+  style="position: absolute; top: 50%; left: 70%;">
+
+<div class="drag-handle" cdkDragHandle></div>
+<button class="hide-btn" (click)="hideWidget('image')">×</button>
+<app-resizable-image-widget></app-resizable-image-widget>
+</div>
 </div>
 
 <div class="toolbox" [class.visible]="toolboxVisible">
