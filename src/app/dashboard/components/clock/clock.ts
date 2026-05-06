@@ -140,8 +140,27 @@ export class ClockComponent implements OnInit, OnDestroy {
   }
 
   // -- Reset Handlers --
-  resetStopwatch() { this.stopwatch = 0; }
-  setTimer(val: number) { this.timer = val; } // For the quick buttons
-  resetTimer() { this.timer = 60; }
-  resetPomodoro() { this.pomodoro = 25 * 60; }
+  resetStopwatch() {
+    this.stopwatch = 0;
+    this.running = false;
+    this.clearActiveInterval();
+  }
+
+  setTimer(val: number) {
+    this.timer = val;
+    this.running = false;
+    this.clearActiveInterval();
+  }
+
+  resetTimer() {
+    this.timer = 60;
+    this.running = false;
+    this.clearActiveInterval();
+  }
+
+  resetPomodoro() {
+    this.pomodoro = 25 * 60;
+    this.running = false;
+    this.clearActiveInterval();
+  }
 }

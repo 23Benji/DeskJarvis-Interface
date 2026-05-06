@@ -1,0 +1,25 @@
+/* Container for the action buttons */
+.button-row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap; /* Allows the 30s, 60s buttons to wrap to a new line if needed */
+  gap: 20px; /* CRUCIAL: Adds wide spacing between buttons to prevent misclicks */
+  margin-top: 25px;
+}
+
+/* The actual Start, Pause, Reset, and time-setter buttons */
+.button-row button {
+  font-size: 1.2rem; /* Large, easy-to-read text */
+  font-family: inherit;
+  min-width: 100px; /* Ensures even short words like 'Start' have a wide button */
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+/* Hover/Focus effect for visual feedback (very important for hand tracking!) */
+.button-row button:hover,
+.button-row button:focus {
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+  transform: scale(1.05); /* Makes the button pop out when hovered */
+}
