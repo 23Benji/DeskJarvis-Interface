@@ -1,34 +1,46 @@
 import k from "./kaplayCtx";
+import { BOARD_HEIGHT, BOARD_WIDTH } from "./constants";
 
-let instance: any = null;
+interface GameManager {
+  score: number;
+  level: number;
+  isGameOver: boolean;
+  isGamePaused: boolean;
+  board: (string | null)[][];
+  reset(): void;
+}
 
-export function initGameManager() {
+let instance: GameManager | null = null;
+
+export function initGameManager(): GameManager {
   instance = {
     score: 0,
     level: 1,
     isGameOver: false,
-    board: [], // 2D array representation
+    isGamePaused: false,
+    board: [],
     reset() {
       this.score = 0;
       this.level = 1;
       this.isGameOver = false;
-      // Initialize empty board (rows x cols)
-      this.board = Array.from({ length: 20 }, () => Array(10).fill(null));
+      this.isGamePaused = false;
+      this.board = Array.from({ length: BOARD_HEIGHT }, () => Array(BOARD_WIDTH).fill(null));
     }
   };
+  instance.reset();
   return instance;
 }
 
-const gameManager = new Proxy({}, {
+const gameManager = new Proxy({} as GameManager, {
   get: (target, prop) => {
     if (!instance) return undefined;
-    return instance[prop];
+    return instance[prop as keyof GameManager];
   },
   set: (target, prop, value) => {
     if (!instance) return false;
-    instance[prop] = value;
+    (instance as any)[prop] = value;
     return true;
   }
 });
 
-export default gameManager as any;
+export default gameManager;

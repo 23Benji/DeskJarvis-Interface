@@ -6,9 +6,11 @@ export function initGameManager() {
   instance = {
     playerScore: 0,
     cpuScore: 0,
+    isGamePaused: false,
     reset() {
       this.playerScore = 0;
       this.cpuScore = 0;
+      this.isGamePaused = false;
     }
   };
   return instance;

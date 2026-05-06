@@ -3,6 +3,13 @@ import gameManager, { initGameManager } from "./gameManager";
 import { BLOCK_SIZE, BOARD_HEIGHT, BOARD_WIDTH, COLORS } from "./constants";
 import { TETROMINOES } from "./tetrominoes";
 
+interface TetrisPiece {
+  shape: number[][];
+  color: string;
+  x: number;
+  y: number;
+}
+
 export function startTetris(containerId: string) {
   const container = document.getElementById(containerId);
   if (!container) throw new Error("Tetris container not found");
@@ -31,7 +38,29 @@ function setupScenes() {
   k.scene("game", () => {
     gameManager.reset();
 
+    let hoverPaused = false;
+    let blurPaused = false;
+    let manualPaused = false;
+
+    const applyPause = () => {
+      gameManager.isGamePaused = hoverPaused || blurPaused || manualPaused;
+    };
+
+    const onBlur = () => { blurPaused = true; applyPause(); };
+    const onFocus = () => { blurPaused = false; applyPause(); };
+    window.addEventListener('blur', onBlur);
+    window.addEventListener('focus', onFocus);
+    k.onSceneLeave(() => {
+      window.removeEventListener('blur', onBlur);
+      window.removeEventListener('focus', onFocus);
+    });
+
     // -- UI --
+    k.add([
+      k.rect(2, k.height()),
+      k.pos(-2, 0),
+      k.color(100, 100, 100)
+    ]);
     k.add([
       k.rect(2, k.height()),
       k.pos(BOARD_WIDTH * BLOCK_SIZE, 0),
@@ -57,12 +86,23 @@ function setupScenes() {
     let dropTimer = 0;
     const dropInterval = 0.5;
 
-    // -- INPUTS --
+    // -- GAME LOOP + INPUT --
     k.onUpdate(() => {
-      if (gameManager.isGameOver) return;
+      if (gameManager.isGameOver || gameManager.isGamePaused) {
+        const mPos = k.mousePos();
+        hoverPaused = mPos.x < 110 && mPos.y < 110;
+        applyPause();
+        return;
+      }
 
       const mPos = k.mousePos();
-      // Clamp logic mouse X
+      const isOverButton = mPos.x < 110 && mPos.y < 110;
+      if (hoverPaused !== isOverButton) {
+        hoverPaused = isOverButton;
+        applyPause();
+        if (hoverPaused) return;
+      }
+      
       const logicMouseX = Math.min(Math.max(0, mPos.x), BOARD_WIDTH * BLOCK_SIZE);
       
       let targetCol = Math.floor(logicMouseX / BLOCK_SIZE);
@@ -79,31 +119,6 @@ function setupScenes() {
         }
       }
 
-      scoreLabel.text = String(gameManager.score);
-    });
-
-    k.onClick(() => {
-      if (gameManager.isGameOver) {
-        k.go("game");
-        return;
-      }
-      rotatePiece(currentPiece);
-    });
-
-    k.onKeyPress("enter", () => {
-      if (gameManager.isGameOver) return;
-      while (!checkCollision(currentPiece, 0, 1)) {
-        currentPiece.y++;
-      }
-      lockPiece(currentPiece);
-      currentPiece = spawnPiece();
-      if (checkCollision(currentPiece)) gameOver();
-    });
-
-    // -- GAME LOOP --
-    k.onUpdate(() => {
-      if (gameManager.isGameOver) return;
-
       dropTimer += k.dt();
       if (dropTimer >= dropInterval) {
         dropTimer = 0;
@@ -115,7 +130,35 @@ function setupScenes() {
           if (checkCollision(currentPiece)) gameOver();
         }
       }
+
+      scoreLabel.text = String(gameManager.score);
     });
+
+    k.onClick(() => {
+      if (gameManager.isGameOver) {
+        k.go("game");
+        return;
+      }
+      if (gameManager.isGamePaused) {
+        manualPaused = false;
+        applyPause();
+        return;
+      }
+      rotatePiece(currentPiece);
+    });
+
+    k.onKeyPress("enter", () => {
+      if (gameManager.isGameOver || gameManager.isGamePaused) return;
+      while (!checkCollision(currentPiece, 0, 1)) {
+        currentPiece.y++;
+      }
+      lockPiece(currentPiece);
+      currentPiece = spawnPiece();
+      if (checkCollision(currentPiece)) gameOver();
+    });
+
+    k.onKeyPress("p", () => { manualPaused = !manualPaused; applyPause(); });
+    k.onKeyPress("escape", () => { manualPaused = !manualPaused; applyPause(); });
 
     // -- DRAWING --
     k.onDraw(() => {
@@ -143,14 +186,15 @@ function setupScenes() {
 }
 
 // 🛠️ FIX: Helper to convert Hex String to Kaplay RGB
-function hexToKColor(hex: string) {
+function hexToKColor(hex: string | null) {
+  if (!hex) return k.color(0, 0, 0) as any;
   const r = parseInt(hex.substring(1, 3), 16);
   const g = parseInt(hex.substring(3, 5), 16);
   const b = parseInt(hex.substring(5, 7), 16);
-  return k.color(r, g, b);
+  return k.color(r, g, b) as any;
 }
 
-function spawnPiece() {
+function spawnPiece(): TetrisPiece {
   const typeId = Math.floor(Math.random() * TETROMINOES.length);
   const template = TETROMINOES[typeId];
   const shape = template.shape.map(row => [...row]);
@@ -163,10 +207,10 @@ function spawnPiece() {
   };
 }
 
-function rotatePiece(piece: any) {
+function rotatePiece(piece: TetrisPiece) {
   const originalShape = piece.shape;
-  const newShape = piece.shape[0].map((val: any, index: number) => 
-    piece.shape.map((row: any) => row[index]).reverse()
+  const newShape = piece.shape[0].map((val, index) => 
+    piece.shape.map(row => row[index]).reverse()
   );
 
   piece.shape = newShape;
@@ -184,7 +228,7 @@ function rotatePiece(piece: any) {
   }
 }
 
-function checkCollision(piece: any, offX = 0, offY = 0) {
+function checkCollision(piece: TetrisPiece, offX = 0, offY = 0) {
   const { shape, x, y } = piece;
   for (let row = 0; row < shape.length; row++) {
     for (let col = 0; col < shape[row].length; col++) {
@@ -200,7 +244,7 @@ function checkCollision(piece: any, offX = 0, offY = 0) {
   return false;
 }
 
-function lockPiece(piece: any) {
+function lockPiece(piece: TetrisPiece) {
   const { shape, x, y, color } = piece;
   
   for (let row = 0; row < shape.length; row++) {
@@ -215,9 +259,9 @@ function lockPiece(piece: any) {
 
   let linesCleared = 0;
   for (let r = BOARD_HEIGHT - 1; r >= 0; r--) {
-    if (gameManager.board[r].every((cell: any) => cell !== null)) {
+    if (gameManager.board[r].every((cell: string | null) => cell !== null)) {
       gameManager.board.splice(r, 1);
-      gameManager.board.unshift(Array(10).fill(null));
+      gameManager.board.unshift(Array(BOARD_WIDTH).fill(null));
       linesCleared++;
       r++; 
     }
@@ -245,8 +289,54 @@ function drawMatrix(matrix: any[][], offsetX: number, offsetY: number, colorHex:
   });
 }
 
+function togglePause() {
+  if (gameManager.isGameOver) return;
+  const root = k.getTreeRoot();
+  root.paused = !root.paused;
+  gameManager.isGamePaused = root.paused;
+
+  if (root.paused) {
+    k.add([
+      k.rect(k.width(), k.height()),
+      k.color(0, 0, 0),
+      k.opacity(0.7),
+      "pause-overlay"
+    ]);
+    k.add([
+      k.text("PAUSED", { size: 32 }),
+      k.anchor("center"),
+      k.pos(k.width() / 2, k.height() / 2 - 20),
+      k.color(255, 255, 255),
+      "pause-text"
+    ]);
+    k.add([
+      k.text("Press P or ESC to resume", { size: 14 }),
+      k.anchor("center"),
+      k.pos(k.width() / 2, k.height() / 2 + 20),
+      k.color(200, 200, 200),
+      "pause-hint"
+    ]);
+  } else {
+    const overlay = k.get("pause-overlay")[0];
+    if (overlay) k.destroy(overlay);
+    const text = k.get("pause-text")[0];
+    if (text) k.destroy(text);
+    const hint = k.get("pause-hint")[0];
+    if (hint) k.destroy(hint);
+  }
+}
+
 function gameOver() {
   gameManager.isGameOver = true;
+  if (gameManager.isGamePaused) {
+    const overlay = k.get("pause-overlay")[0];
+    if (overlay) k.destroy(overlay);
+    const text = k.get("pause-text")[0];
+    if (text) k.destroy(text);
+    const hint = k.get("pause-hint")[0];
+    if (hint) k.destroy(hint);
+    gameManager.isGamePaused = false;
+  }
   k.add([
       k.text("GAME OVER", { size: 32 }),
       k.anchor("center"),

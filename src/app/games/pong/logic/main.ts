@@ -26,6 +26,23 @@ function setupScenes() {
   k.scene("game", () => {
     gameManager.reset();
 
+    let hoverPaused = false;
+    let blurPaused = false;
+    let manualPaused = false;
+
+    const applyPause = () => {
+      gameManager.isGamePaused = hoverPaused || blurPaused || manualPaused;
+    };
+
+    const onBlur = () => { blurPaused = true; applyPause(); };
+    const onFocus = () => { blurPaused = false; applyPause(); };
+    window.addEventListener('blur', onBlur);
+    window.addEventListener('focus', onFocus);
+    k.onSceneLeave(() => {
+      window.removeEventListener('blur', onBlur);
+      window.removeEventListener('focus', onFocus);
+    });
+
     const center = k.vec2(k.width() / 2, k.height() / 2);
     const paddleSpeed = 400; // AI Speed
     const initialBallSpeed = 400;
@@ -99,11 +116,18 @@ function setupScenes() {
     // 1. Player Movement (Mouse Y)
     k.onUpdate(() => {
       const mPos = k.mousePos();
+      const isOverButton = mPos.x < 110 && mPos.y < 110;
+      if (hoverPaused !== isOverButton) {
+        hoverPaused = isOverButton;
+        applyPause();
+      }
+      if (gameManager.isGamePaused) return;
       player.pos.y = Math.max(50, Math.min(k.height() - 50, mPos.y));
     });
 
     // 2. CPU AI Movement
     k.onUpdate(() => {
+      if (gameManager.isGamePaused) return;
       const delta = k.dt();
       if (ball.pos.y > cpu.pos.y + 10) {
         cpu.pos.y += paddleSpeed * delta;
@@ -115,6 +139,7 @@ function setupScenes() {
 
     // 3. Ball Movement
     k.onUpdate(() => {
+      if (gameManager.isGamePaused) return;
       ball.pos.x += ball.vel.x * k.dt();
       ball.pos.y += ball.vel.y * k.dt();
 
@@ -122,12 +147,10 @@ function setupScenes() {
       if (ball.pos.x < -20) {
         gameManager.cpuScore++;
         cpuScoreLabel.text = String(gameManager.cpuScore);
-        k.shake(20);
         resetBall(1);
       } else if (ball.pos.x > k.width() + 20) {
         gameManager.playerScore++;
         playerScoreLabel.text = String(gameManager.playerScore);
-        k.shake(20);
         resetBall(-1);
       }
     });
@@ -151,8 +174,16 @@ function setupScenes() {
       } else {
         ball.pos.x = p.pos.x - p.width / 2 - b.width / 2 - 2;
       }
+    });
 
-      k.shake(2);
+    k.onKeyPress("p", () => { manualPaused = !manualPaused; applyPause(); });
+    k.onKeyPress("escape", () => { manualPaused = !manualPaused; applyPause(); });
+
+    k.onClick(() => {
+      if (gameManager.isGamePaused) {
+        manualPaused = false;
+        applyPause();
+      }
     });
 
     function resetBall(direction: number) {
@@ -160,4 +191,40 @@ function setupScenes() {
       ball.vel = k.vec2(direction * initialBallSpeed, k.rand(-200, 200));
     }
   });
+}
+
+function togglePause() {
+  const root = k.getTreeRoot();
+  root.paused = !root.paused;
+  gameManager.isGamePaused = root.paused;
+
+  if (root.paused) {
+    k.add([
+      k.rect(k.width(), k.height()),
+      k.color(0, 0, 0),
+      k.opacity(0.7),
+      "pause-overlay"
+    ]);
+    k.add([
+      k.text("PAUSED", { size: 32 }),
+      k.anchor("center"),
+      k.pos(k.width() / 2, k.height() / 2 - 20),
+      k.color(255, 255, 255),
+      "pause-text"
+    ]);
+    k.add([
+      k.text("Press P or ESC to resume", { size: 14 }),
+      k.anchor("center"),
+      k.pos(k.width() / 2, k.height() / 2 + 20),
+      k.color(200, 200, 200),
+      "pause-hint"
+    ]);
+  } else {
+    const overlay = k.get("pause-overlay")[0];
+    if (overlay) k.destroy(overlay);
+    const text = k.get("pause-text")[0];
+    if (text) k.destroy(text);
+    const hint = k.get("pause-hint")[0];
+    if (hint) k.destroy(hint);
+  }
 }
