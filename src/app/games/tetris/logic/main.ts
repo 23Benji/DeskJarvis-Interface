@@ -3,6 +3,13 @@ import gameManager, { initGameManager } from "./gameManager";
 import { BLOCK_SIZE, BOARD_HEIGHT, BOARD_WIDTH, COLORS } from "./constants";
 import { TETROMINOES } from "./tetrominoes";
 
+interface TetrisPiece {
+  shape: number[][];
+  color: string;
+  x: number;
+  y: number;
+}
+
 export function startTetris(containerId: string) {
   const container = document.getElementById(containerId);
   if (!container) throw new Error("Tetris container not found");
@@ -57,12 +64,11 @@ function setupScenes() {
     let dropTimer = 0;
     const dropInterval = 0.5;
 
-    // -- INPUTS --
+    // -- GAME LOOP + INPUT --
     k.onUpdate(() => {
       if (gameManager.isGameOver) return;
 
       const mPos = k.mousePos();
-      // Clamp logic mouse X
       const logicMouseX = Math.min(Math.max(0, mPos.x), BOARD_WIDTH * BLOCK_SIZE);
       
       let targetCol = Math.floor(logicMouseX / BLOCK_SIZE);
@@ -76,6 +82,18 @@ function setupScenes() {
         currentPiece.x = targetCol;
         if (checkCollision(currentPiece)) {
           currentPiece.x = oldX;
+        }
+      }
+
+      dropTimer += k.dt();
+      if (dropTimer >= dropInterval) {
+        dropTimer = 0;
+        if (!checkCollision(currentPiece, 0, 1)) {
+          currentPiece.y++;
+        } else {
+          lockPiece(currentPiece);
+          currentPiece = spawnPiece();
+          if (checkCollision(currentPiece)) gameOver();
         }
       }
 
@@ -98,23 +116,6 @@ function setupScenes() {
       lockPiece(currentPiece);
       currentPiece = spawnPiece();
       if (checkCollision(currentPiece)) gameOver();
-    });
-
-    // -- GAME LOOP --
-    k.onUpdate(() => {
-      if (gameManager.isGameOver) return;
-
-      dropTimer += k.dt();
-      if (dropTimer >= dropInterval) {
-        dropTimer = 0;
-        if (!checkCollision(currentPiece, 0, 1)) {
-          currentPiece.y++;
-        } else {
-          lockPiece(currentPiece);
-          currentPiece = spawnPiece();
-          if (checkCollision(currentPiece)) gameOver();
-        }
-      }
     });
 
     // -- DRAWING --
@@ -143,14 +144,15 @@ function setupScenes() {
 }
 
 // 🛠️ FIX: Helper to convert Hex String to Kaplay RGB
-function hexToKColor(hex: string) {
+function hexToKColor(hex: string | null) {
+  if (!hex) return k.color(0, 0, 0) as any;
   const r = parseInt(hex.substring(1, 3), 16);
   const g = parseInt(hex.substring(3, 5), 16);
   const b = parseInt(hex.substring(5, 7), 16);
-  return k.color(r, g, b);
+  return k.color(r, g, b) as any;
 }
 
-function spawnPiece() {
+function spawnPiece(): TetrisPiece {
   const typeId = Math.floor(Math.random() * TETROMINOES.length);
   const template = TETROMINOES[typeId];
   const shape = template.shape.map(row => [...row]);
@@ -163,10 +165,10 @@ function spawnPiece() {
   };
 }
 
-function rotatePiece(piece: any) {
+function rotatePiece(piece: TetrisPiece) {
   const originalShape = piece.shape;
-  const newShape = piece.shape[0].map((val: any, index: number) => 
-    piece.shape.map((row: any) => row[index]).reverse()
+  const newShape = piece.shape[0].map((val, index) => 
+    piece.shape.map(row => row[index]).reverse()
   );
 
   piece.shape = newShape;
@@ -184,7 +186,7 @@ function rotatePiece(piece: any) {
   }
 }
 
-function checkCollision(piece: any, offX = 0, offY = 0) {
+function checkCollision(piece: TetrisPiece, offX = 0, offY = 0) {
   const { shape, x, y } = piece;
   for (let row = 0; row < shape.length; row++) {
     for (let col = 0; col < shape[row].length; col++) {
@@ -200,7 +202,7 @@ function checkCollision(piece: any, offX = 0, offY = 0) {
   return false;
 }
 
-function lockPiece(piece: any) {
+function lockPiece(piece: TetrisPiece) {
   const { shape, x, y, color } = piece;
   
   for (let row = 0; row < shape.length; row++) {
@@ -215,9 +217,9 @@ function lockPiece(piece: any) {
 
   let linesCleared = 0;
   for (let r = BOARD_HEIGHT - 1; r >= 0; r--) {
-    if (gameManager.board[r].every((cell: any) => cell !== null)) {
+    if (gameManager.board[r].every((cell: string | null) => cell !== null)) {
       gameManager.board.splice(r, 1);
-      gameManager.board.unshift(Array(10).fill(null));
+      gameManager.board.unshift(Array(BOARD_WIDTH).fill(null));
       linesCleared++;
       r++; 
     }
