@@ -1,6 +1,5 @@
 <div class="clock-widget">
   <div class="menu-bar">
-    <!-- Added stopPropagation so clicking inside the menu doesn't close it -->
     <div class="dropdown-menu" *ngIf="menuOpen" (click)="$event.stopPropagation()">
       <button *ngFor="let tab of ['clock', 'stopwatch', 'timer', 'pomodoro']"
               (click)="switchTab(tab)"
@@ -11,7 +10,6 @@
   </div>
 
   <div class="clock-display">
-    <!-- Pass $event to toggleMenu -->
     <button class="menu-icon" (click)="toggleMenu($event)">
       <lucide-icon [img]="MenuIcon" size="30"></lucide-icon>
     </button>
@@ -27,28 +25,36 @@
         <button (click)="resetStopwatch()">Reset</button>
       </div>
     </div>
-    <div *ngIf="activeTab === 'timer'">
-      <div>{{ formatTime(timer) }}</div>
 
-      <!-- NEW: Specific container for preset times -->
+    <div *ngIf="activeTab === 'timer'">
+      <div [class.blinking]="isAlarmRinging">{{ formatTime(timer) }}</div>
+
       <div class="preset-grid">
-        <button *ngFor="let sec of [30, 60, 300, 600, 900]" (click)="setTimer(sec)">
+        <button *ngFor="let sec of [30, 60, 300, 600, 900]" (click)="setTimer(sec)" [disabled]="isAlarmRinging">
           {{ sec < 60 ? sec + 's' : (sec / 60) + 'm' }}
         </button>
       </div>
 
-      <!-- NEW: Specific container for actions -->
-      <div class="action-row">
+      <div class="action-row" *ngIf="!isAlarmRinging">
         <button (click)="toggleRunning()">{{ running ? 'Pause' : 'Start' }}</button>
         <button (click)="resetTimer()">Reset</button>
+      </div>
+
+      <div class="action-row" *ngIf="isAlarmRinging">
+        <button class="stop-alarm-btn" (click)="stopAlarm()">STOP ALARM</button>
       </div>
     </div>
 
     <div *ngIf="activeTab === 'pomodoro'">
-      <div>{{ formatTime(pomodoro) }}</div>
-      <div class="button-row">
+      <div [class.blinking]="isAlarmRinging">{{ formatTime(pomodoro) }}</div>
+
+      <div class="button-row" *ngIf="!isAlarmRinging">
         <button (click)="toggleRunning()">{{ running ? 'Pause' : 'Start' }}</button>
         <button (click)="resetPomodoro()">Reset</button>
+      </div>
+
+      <div class="button-row" *ngIf="isAlarmRinging">
+        <button class="stop-alarm-btn" (click)="stopAlarm()">STOP ALARM</button>
       </div>
     </div>
 

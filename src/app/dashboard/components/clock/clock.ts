@@ -21,6 +21,10 @@ export class ClockComponent implements OnInit, OnDestroy {
   pomodoro: number = 25 * 60;
   running: boolean = false;
 
+  // Alarm State
+  isAlarmRinging: boolean = false;
+  private alarmAudio = new Audio('assets/sounds/ui-appear.wav'); // Uses your existing sound
+
   // Clock format preference
   use12HourFormat: boolean = true;
 
@@ -32,6 +36,9 @@ export class ClockComponent implements OnInit, OnDestroy {
   readonly MenuIcon = Menu;
 
   ngOnInit() {
+    // Set alarm to loop until stopped manually
+    this.alarmAudio.loop = true;
+
     // Load clock format preference
     this.loadClockFormatPreference();
 
@@ -48,6 +55,7 @@ export class ClockComponent implements OnInit, OnDestroy {
     // Cleanup intervals when widget is removed
     if (this.clockInterval) clearInterval(this.clockInterval);
     this.clearActiveInterval();
+    this.stopAlarm(); // Ensure sound stops if widget is closed
 
     // Remove event listener
     window.removeEventListener('clockFormatChanged', this.handleFormatChange);
@@ -95,6 +103,7 @@ export class ClockComponent implements OnInit, OnDestroy {
     this.activeTab = tab;
     this.menuOpen = false;
     this.clearActiveInterval();
+    this.stopAlarm(); // Stop alarm if user switches tabs
   }
 
   // Stop propagation here so the document click listener doesn't immediately close it
@@ -107,6 +116,20 @@ export class ClockComponent implements OnInit, OnDestroy {
   @HostListener('document:click')
   closeMenu() {
     this.menuOpen = false;
+  }
+
+  // -- Alarm Logic --
+  private triggerAlarm() {
+    this.isAlarmRinging = true;
+    this.running = false;
+    this.clearActiveInterval();
+    this.alarmAudio.play().catch(e => console.log('Audio play failed', e));
+  }
+
+  stopAlarm() {
+    this.isAlarmRinging = false;
+    this.alarmAudio.pause();
+    this.alarmAudio.currentTime = 0; // Reset audio to beginning
   }
 
   // -- Start/Pause Logic --
@@ -130,11 +153,17 @@ export class ClockComponent implements OnInit, OnDestroy {
       if (this.activeTab === 'stopwatch') {
         this.stopwatch++;
       } else if (this.activeTab === 'timer') {
-        if (this.timer > 0) this.timer--;
-        else this.toggleRunning(); // Stop if 0
+        if (this.timer > 0) {
+          this.timer--;
+        } else {
+          this.triggerAlarm();
+        }
       } else if (this.activeTab === 'pomodoro') {
-        if (this.pomodoro > 0) this.pomodoro--;
-        else this.toggleRunning();
+        if (this.pomodoro > 0) {
+          this.pomodoro--;
+        } else {
+          this.triggerAlarm();
+        }
       }
     }, 1000);
   }
@@ -150,17 +179,20 @@ export class ClockComponent implements OnInit, OnDestroy {
     this.timer = val;
     this.running = false;
     this.clearActiveInterval();
+    this.stopAlarm();
   }
 
   resetTimer() {
     this.timer = 60;
     this.running = false;
     this.clearActiveInterval();
+    this.stopAlarm();
   }
 
   resetPomodoro() {
     this.pomodoro = 25 * 60;
     this.running = false;
     this.clearActiveInterval();
+    this.stopAlarm();
   }
 }

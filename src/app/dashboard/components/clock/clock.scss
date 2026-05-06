@@ -23,3 +23,41 @@
   box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
   transform: scale(1.05); /* Makes the button pop out when hovered */
 }
+/* --- ALARM BLINKING ANIMATION --- */
+@keyframes blink-animation {
+  0% {
+    opacity: 1;
+    color: #ff3333;
+    text-shadow: 0 0 20px #ff3333;
+  }
+  50% {
+    opacity: 0.5;
+    color: #ffffff;
+    text-shadow: none;
+  }
+  100% {
+    opacity: 1;
+    color: #ff3333;
+    text-shadow: 0 0 20px #ff3333;
+  }
+}
+
+.blinking {
+  animation: blink-animation 1s infinite;
+}
+
+/* --- STOP ALARM BUTTON --- */
+.stop-alarm-btn {
+  background: rgba(255, 0, 0, 0.2) !important;
+  color: #ff3333 !important;
+  border: 2px solid #ff3333 !important;
+  font-weight: bold;
+  min-width: 200px !important; /* Make it extra large for easy clicking */
+  padding: 20px !important;
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+}
+
+.stop-alarm-btn:hover {
+  background: rgba(255, 0, 0, 0.5) !important;
+  box-shadow: 0 0 30px rgba(255, 0, 0, 0.6);
+}
