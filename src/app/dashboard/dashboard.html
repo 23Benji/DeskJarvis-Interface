@@ -8,6 +8,8 @@
   </div>
 
   <div *ngIf="widgets['clock']" class="widget" cdkDrag
+       [cdkDragFreeDragPosition]="positions['clock'] || {x: 0, y: 0}"
+       (cdkDragEnded)="onDragEnded($event, 'clock')"
        style="position: absolute; top: 5%; left: 35%;">
     <div class="drag-handle" cdkDragHandle></div>
     <button class="hide-btn" (click)="hideWidget('clock')">×</button>
@@ -15,6 +17,8 @@
   </div>
 
   <div *ngIf="widgets['weather']" class="widget" cdkDrag
+       [cdkDragFreeDragPosition]="positions['weather'] || {x: 0, y: 0}"
+       (cdkDragEnded)="onDragEnded($event, 'weather')"
        style="position: absolute; top: 15%; right: 7%;">
     <div class="drag-handle" cdkDragHandle></div>
     <button class="hide-btn" (click)="hideWidget('weather')">×</button>
@@ -22,6 +26,8 @@
   </div>
 
   <div *ngIf="widgets['calendar']" class="widget" cdkDrag
+       [cdkDragFreeDragPosition]="positions['calendar'] || {x: 0, y: 0}"
+       (cdkDragEnded)="onDragEnded($event, 'calendar')"
        style="position: absolute; bottom: 5%; left: 5%;">
     <div class="drag-handle" cdkDragHandle></div>
     <button class="hide-btn" (click)="hideWidget('calendar')">×</button>
@@ -29,6 +35,8 @@
   </div>
 
   <div *ngIf="widgets['notes']" class="widget" cdkDrag
+       [cdkDragFreeDragPosition]="positions['notes'] || {x: 0, y: 0}"
+       (cdkDragEnded)="onDragEnded($event, 'notes')"
        style="position: absolute; top: 10%; left: 5%;">
     <div class="drag-handle" cdkDragHandle></div>
     <button class="hide-btn" (click)="hideWidget('notes')">×</button>
@@ -36,6 +44,8 @@
   </div>
 
   <div *ngIf="widgets['music']" class="widget" cdkDrag
+       [cdkDragFreeDragPosition]="positions['music'] || {x: 0, y: 0}"
+       (cdkDragEnded)="onDragEnded($event, 'music')"
        style="position: absolute; bottom: 5%; right: 35%;">
     <div class="drag-handle" cdkDragHandle></div>
     <button class="hide-btn" (click)="hideWidget('music')">×</button>
@@ -43,20 +53,32 @@
   </div>
 
   <div *ngIf="widgets['image']" class="widget" cdkDrag
+       [cdkDragFreeDragPosition]="positions['image'] || {x: 0, y: 0}"
+       (cdkDragEnded)="onDragEnded($event, 'image')"
        style="position: absolute; top: 50%; right: 10%;">
     <div class="drag-handle" cdkDragHandle></div>
     <button class="hide-btn" (click)="hideWidget('image')">×</button>
     <app-resizable-image-widget></app-resizable-image-widget>
   </div>
+</div>
 
-  <div class="toolbox" [class.visible]="toolboxVisible">
-    <div *ngFor="let name of hiddenWidgets"
-         class="toolbox-icon"
-         [title]="name | uppercase"
-         (click)="showWidget(name)">
-
-         <lucide-icon [img]="Icons[name]" size="18"></lucide-icon>
-    </div>
-  </div>
-
+<div class="toolbox" [class.visible]="toolboxVisible">
+  <button *ngIf="!widgets['clock']" class="tool-btn" (click)="showWidget('clock')" title="Clock">
+    <lucide-icon [img]="Icons['clock']" size="24"></lucide-icon>
+  </button>
+  <button *ngIf="!widgets['weather']" class="tool-btn" (click)="showWidget('weather')" title="Weather">
+    <lucide-icon [img]="Icons['weather']" size="24"></lucide-icon>
+  </button>
+  <button *ngIf="!widgets['calendar']" class="tool-btn" (click)="showWidget('calendar')" title="Calendar">
+    <lucide-icon [img]="Icons['calendar']" size="24"></lucide-icon>
+  </button>
+  <button *ngIf="!widgets['notes']" class="tool-btn" (click)="showWidget('notes')" title="Notes">
+    <lucide-icon [img]="Icons['notes']" size="24"></lucide-icon>
+  </button>
+  <button *ngIf="!widgets['music']" class="tool-btn" (click)="showWidget('music')" title="Music Player">
+    <lucide-icon [img]="Icons['music']" size="24"></lucide-icon>
+  </button>
+  <button *ngIf="!widgets['image']" class="tool-btn" (click)="showWidget('image')" title="Image">
+    <lucide-icon [img]="Icons['image']" size="24"></lucide-icon>
+  </button>
 </div>
