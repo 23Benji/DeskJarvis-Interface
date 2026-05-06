@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-weather',
@@ -11,64 +12,58 @@ import { CommonModule } from '@angular/common';
 export class WeatherComponent implements OnInit {
   weather: any = null;
   error: boolean = false;
-  city: string = '';
+  city: string = 'Bolzano';
   time: string = '';
+
+  private readonly LAT = 46.4983;
+  private readonly LON = 11.3548;
+
+  constructor(private http: HttpClient) {}
 
   ngOnInit() {
     this.updateTime();
-    // Update time every minute
     setInterval(() => this.updateTime(), 60000);
-
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => this.handleGeoSuccess(pos),
-        () => this.handleError()
-      );
-    } else {
-      this.handleError();
-    }
+    this.fetchWeather();
   }
 
   updateTime() {
     this.time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   }
 
-  async handleGeoSuccess(pos: any) {
-    const { latitude, longitude } = pos.coords;
-    try {
-      // 1. Get City Name
-      const geoRes = await fetch(
-        `https://geocoding-api.open-meteo.com/v1/reverse?latitude=${latitude}&longitude=${longitude}`
-      );
-      const geoData = await geoRes.json();
-      this.city = geoData?.results?.[0]?.name || '';
-
-      // 2. Get Weather
-      const res = await fetch(
-        `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`
-      );
-      if (!res.ok) throw new Error('Network error');
-      const data = await res.json();
-      this.weather = data.current_weather;
-    } catch (err) {
-      console.warn('Weather fetch failed:', err);
-      this.error = true;
-    }
-  }
-
-  handleError() {
-    this.error = true;
+  fetchWeather() {
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${this.LAT}&longitude=${this.LON}&current_weather=true&temperature_unit=celsius`;
+    this.http.get<any>(url).subscribe({
+      next: (data) => {
+        this.weather = data.current_weather;
+      },
+      error: (err) => {
+        console.warn('Weather fetch failed:', err);
+        this.error = true;
+      }
+    });
   }
 
   get icon(): string {
     if (!this.weather) return '';
     const code = this.weather.weathercode;
-    return code < 3 ? '☀️' : code < 60 ? '☁️' : '🌧️';
+    if (code === 0) return '☀️';
+    if (code <= 3) return '⛅';
+    if (code === 45 || code === 48) return '🌫️';
+    if (code >= 51 && code <= 67) return '🌧️';
+    if (code >= 71 && code <= 77) return '🌨️';
+    if (code >= 80) return '⛈️';
+    return '☁️';
   }
 
   get description(): string {
     if (!this.weather) return '';
     const code = this.weather.weathercode;
-    return code < 3 ? 'Sunny' : code < 60 ? 'Cloudy' : 'Rainy';
+    if (code === 0) return 'Clear';
+    if (code <= 3) return 'Partly cloudy';
+    if (code === 45 || code === 48) return 'Foggy';
+    if (code >= 51 && code <= 67) return 'Rainy';
+    if (code >= 71 && code <= 77) return 'Snowy';
+    if (code >= 80) return 'Stormy';
+    return 'Cloudy';
   }
 }
