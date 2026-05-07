@@ -69,11 +69,11 @@ canvas {
   height: auto;
 
   opacity: 0; /* Hidden until typing finishes */
-  filter: drop-shadow(0 0 0px #00ff22);
+  filter: drop-shadow(0 0 0px #00ffff);
   transition: opacity 1.5s ease-in, filter 1.5s ease-in;
 }
 
 .intro-logo.visible {
   opacity: 1;
-  filter: drop-shadow(0 0 30px #00ff22);
+  filter: drop-shadow(0 0 30px #00ffff);
 }

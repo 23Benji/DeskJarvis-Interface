@@ -1,118 +1,261 @@
+/* --- GLOBAL HUD ENVIRONMENT --- */
 .settings-container {
-  width: 100vw;
   height: 100vh;
-  background: #000000;
-  color: white;
+  width: 100vw;
+  background-color: #010406;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  color: #00ffff;
   font-family: 'Orbitron', sans-serif;
+  overflow: hidden;
+  position: relative;
 }
 
+.parallax-grid {
+  position: absolute;
+  width: 200vw;
+  height: 200vh;
+  top: -50vh;
+  left: -50vw;
+  background-image:
+    linear-gradient(rgba(0, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  transform: perspective(600px) rotateX(45deg);
+  animation: grid-move 20s linear infinite;
+  z-index: 0;
+}
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 250px rgba(0, 0, 0, 1);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.scanlines {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.3));
+  background-size: 100% 4px;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+/* --- HUD BACK BUTTON --- */
+.home-btn {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  z-index: 1000;
+  color: rgba(0, 255, 255, 0.6);
+  background: rgba(0, 10, 15, 0.8);
+  border: 1px solid rgba(0, 255, 255, 0.3);
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  text-decoration: none;
+  backdrop-filter: blur(5px);
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+
+  span {
+    font-size: 0.8rem;
+    font-family: monospace;
+    letter-spacing: 2px;
+  }
+}
+
+.home-btn:hover {
+  color: #ffffff;
+  border-color: #00ffff;
+  background: rgba(0, 255, 255, 0.15);
+  transform: translateX(10px);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+}
+
+/* --- SYSTEM DIAGNOSTICS READOUT --- */
+.hud-status-bar {
+  position: absolute;
+  top: 30px;
+  right: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  color: rgba(0, 255, 255, 0.6);
+  z-index: 10;
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-align: right;
+  justify-content: flex-end;
+}
+
+.blinking {
+  animation: flicker 2s infinite;
+  color: #00ffff;
+  text-shadow: 0 0 10px #00ffff;
+}
+
+/* --- MAIN PANEL WRAPPER --- */
+.hud-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 10;
+  width: 100%;
+}
+
+.title-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.system-title {
+  font-size: 2rem;
+  color: rgba(0, 255, 255, 0.9);
+  letter-spacing: 8px;
+  text-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+  margin: 0;
+}
+
+.title-underline {
+  width: 150%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #00ffff, transparent);
+  margin-top: 10px;
+  position: relative;
+}
+
+.title-underline::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 6px;
+  background: #00ffff;
+  box-shadow: 0 0 10px #00ffff;
+}
+
+/* --- THE SETTINGS TERMINAL --- */
 .settings-panel {
-  background: rgba(255, 255, 255, 0.05);
-  padding: 40px;
-  border-radius: 15px;
-  width: 400px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 15, 25, 0.85);
+  padding: 50px 60px;
+  width: 650px;
+  max-width: 90%;
+  border: 1px solid rgba(0, 255, 255, 0.15);
+  box-shadow: 0 0 40px rgba(0, 255, 255, 0.1), inset 0 0 50px rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  position: relative;
+  /* ANGLED CUT CORNERS FOR HIGH TECH LOOK */
+  clip-path: polygon(
+    20px 0, 100% 0,
+    100% calc(100% - 20px), calc(100% - 20px) 100%,
+    0 100%, 0 20px
+  );
+}
+
+/* Optical Corner Markers (The L-Shapes) */
+.corner { position: absolute; width: 15px; height: 15px; border: 2px solid #00ffff; pointer-events: none; }
+.top-left { top: 10px; left: 10px; border-right: none; border-bottom: none; }
+.top-right { top: 10px; right: 10px; border-left: none; border-bottom: none; }
+.bottom-left { bottom: 10px; left: 10px; border-right: none; border-top: none; }
+.bottom-right { bottom: 10px; right: 10px; border-left: none; border-top: none; }
+
+
+/* --- DATA LIST --- */
+.settings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
 }
 
 .setting-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.toggle-btn {
-  background: transparent;
-  border: 1px solid #00ffff;
-  color: #00ffff;
-  padding: 5px 15px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-/* 🏠 GLOBAL HOME BUTTON STYLES */
-.home-btn {
-  position: absolute; /* or fixed, depending on your layout preference */
-  top: 0;
-  left: 0;
-  z-index: 2000; /* High z-index to be on top of everything */
-
-  /* 📐 SHAPE: Quarter Circle */
-  width: 100px;  /* Big clickable area */
-  height: 100px;
-  background: rgba(0, 0, 0, 0.3); /* Subtle dark background */
-  border-radius: 0 0 100% 0; /* Curve the bottom-right corner */
-
-  /* 🎨 ICON POSITIONING */
-  display: flex;
-  align-items: flex-start; /* Push icon to top */
-  justify-content: flex-start; /* Push icon to left */
-  padding-top: 20px;  /* Space from top edge */
-  padding-left: 20px; /* Space from left edge */
-  box-sizing: border-box; /* Ensures padding doesn't increase size */
-
-  color: rgba(255, 255, 255, 0.5);
-  cursor: pointer;
+  position: relative;
   transition: all 0.3s ease;
-  text-decoration: none; /* No underline */
-  backdrop-filter: blur(5px); /* Cool glass effect */
 }
 
-/* HOVER EFFECT */
-.home-btn:hover {
-  width: 110px;  /* Expands slightly */
-  height: 110px;
-  background: rgba(0, 255, 255, 0.15); /* Cyan tint */
+.setting-label {
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  color: rgba(0, 255, 255, 0.5);
+  font-family: monospace;
+}
+
+/* --- TARGET-LOCK BUTTONS --- */
+.tech-btn {
+  background: rgba(0, 30, 45, 0.6);
+  border: 1px solid rgba(0, 255, 255, 0.3);
   color: #00ffff;
-  box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
-}
-
-/* 🏠 GLOBAL HOME BUTTON STYLES */
-.home-btn {
-  position: absolute; /* or fixed, depending on your layout preference */
-  top: 0;
-  left: 0;
-  z-index: 2000; /* High z-index to be on top of everything */
-
-  /* 📐 SHAPE: Quarter Circle */
-  width: 100px;  /* Big clickable area */
-  height: 100px;
-  background: rgba(0, 0, 0, 0.3); /* Subtle dark background */
-  border-radius: 0 0 100% 0; /* Curve the bottom-right corner */
-
-  /* 🎨 ICON POSITIONING */
-  display: flex;
-  align-items: flex-start; /* Push icon to top */
-  justify-content: flex-start; /* Push icon to left */
-  padding-top: 20px;  /* Space from top edge */
-  padding-left: 20px; /* Space from left edge */
-  box-sizing: border-box; /* Ensures padding doesn't increase size */
-
-  color: rgba(255, 255, 255, 0.5);
+  padding: 12px 25px;
   cursor: pointer;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
   transition: all 0.3s ease;
-  text-decoration: none; /* No underline */
-  backdrop-filter: blur(5px); /* Cool glass effect */
+  text-decoration: none;
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
 }
 
-/* HOVER EFFECT */
-.home-btn:hover {
-  width: 110px;  /* Expands slightly */
-  height: 110px;
-  background: rgba(0, 255, 255, 0.15); /* Cyan tint */
-  color: #00ffff;
-  box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+.target-brackets {
+  position: absolute;
+  inset: 2px;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+  pointer-events: none;
 }
 
-/* Icon specific tweak to keep it crisp */
-.home-btn lucide-icon {
-  transition: transform 0.3s ease;
+.tech-btn:hover {
+  background: rgba(0, 40, 60, 0.9);
+  border-color: #00ffff;
+  color: #ffffff;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+
+  .target-brackets {
+    border-color: #00ffff;
+    /* Draws corners [ ] */
+    clip-path: polygon(0 0, 8px 0, 8px 2px, 2px 2px, 2px 8px, 0 8px, 0 100%, 8px 100%, 8px calc(100% - 2px), 2px calc(100% - 2px), 2px calc(100% - 8px), 0 calc(100% - 8px), 100% 0, calc(100% - 8px) 0, calc(100% - 8px) 2px, calc(100% - 2px) 2px, calc(100% - 2px) 8px, 100% 8px, 100% 100%, calc(100% - 8px) 100%, calc(100% - 8px) calc(100% - 2px), calc(100% - 2px) calc(100% - 2px), calc(100% - 2px) calc(100% - 8px), 100% calc(100% - 8px));
+  }
 }
 
-.home-btn:hover lucide-icon {
-  transform: scale(1.2); /* Icon grows */
+.tech-readout {
+  font-family: monospace;
+  font-size: 0.9rem;
+  color: rgba(0, 255, 255, 0.8);
+  background: rgba(0, 255, 255, 0.05);
+  padding: 8px 15px;
+  border-left: 3px solid #00ffff;
+}
+
+/* --- KEYFRAMES --- */
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+
+@keyframes grid-move {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 60px; }
 }

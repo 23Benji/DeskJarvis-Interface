@@ -89,7 +89,7 @@ export class MatrixEffectComponent implements AfterViewInit, OnDestroy {
           ctx.shadowBlur = 10;       // Glow effect
           ctx.shadowColor = '#FFFFFF';
         } else {
-          ctx.fillStyle = '#0F0';    // Standard Matrix Green
+          ctx.fillStyle = 'rgb(0, 195, 255)';    // Standard Matrix Green
           ctx.shadowBlur = 0;
         }
 

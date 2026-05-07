@@ -1,45 +1,74 @@
 <div class="settings-container">
-  <a routerLink="/" class="home-btn">
-    <lucide-icon [img]="Icons.HomeIcon" size="24"></lucide-icon>
+  <div class="parallax-grid"></div>
+  <div class="scanlines"></div>
+  <div class="vignette"></div>
+
+  <a routerLink="/" class="home-btn" title="Back to System">
+    <lucide-icon [img]="Icons.HomeIcon" size="20"></lucide-icon>
+    <span>RETURN</span>
   </a>
 
-  <h1>System Settings</h1>
+  <div class="hud-status-bar">
+    <div class="status-item blinking"><lucide-icon [img]="Icons.Activity" size="14"></lucide-icon> SYS_ONLINE</div>
+    <div class="status-item"><lucide-icon [img]="Icons.Cpu" size="14"></lucide-icon> MEM: OPTIMAL</div>
+    <div class="status-item"><lucide-icon [img]="Icons.Shield" size="14"></lucide-icon> SEC: ENCRYPTED</div>
+  </div>
 
-  <div class="settings-panel">
-    <!-- NEW: Clock Format Setting -->
-    <div class="setting-item">
-      <span>Clock Format</span>
-      <button
-        class="toggle-btn"
-        (click)="toggleClockFormat()"
-        style="display: flex; align-items: center; gap: 5px;">
-        {{ clockFormatText }}
-      </button>
+  <div class="hud-wrapper">
+    <div class="title-container">
+      <h1 class="system-title">SYSTEM CONFIGURATION</h1>
+      <div class="title-underline"></div>
     </div>
 
-    <div class="setting-item">
-      <span>System Guide</span>
-      <a routerLink="/tutorial" class="toggle-btn" style="text-decoration: none; display: flex; align-items: center; gap: 5px;">
-        <lucide-icon [img]="Icons.HelpIcon" size="16"></lucide-icon>
-        Tutorial
-      </a>
-    </div>
+    <div class="settings-panel">
+      <div class="corner top-left"></div>
+      <div class="corner top-right"></div>
+      <div class="corner bottom-left"></div>
+      <div class="corner bottom-right"></div>
 
-    <div class="setting-item">
-      <span>Github (DeskJarvis)</span>
-      <span><a class="toggle-btn"
-        style="text-decoration: none; display: flex; align-items: center; gap: 5px;"
-        href="https://github.com/23Benji/desk-jarvis-ang" target="_blank">Take a look !</a></span>
-    </div>
-    <div class="setting-item">
-      <span>Github (HandTracking)</span>
-      <span><a class="toggle-btn"
-        style="text-decoration: none; display: flex; align-items: center; gap: 5px;"
-        href="https://github.com/mp3skater/AR-Hand-Tracker-Mouse" target="_blank">Try it out</a></span>
-    </div>
-    <div class="setting-item">
-      <span>Version</span>
-      <span>v2.0 (Angular)</span>
+      <div class="scanner-laser"></div>
+
+      <div class="settings-list">
+
+        <div class="setting-item">
+          <div class="setting-label">CLOCK_PROTOCOL</div>
+          <button class="tech-btn" (click)="toggleClockFormat()">
+            <div class="target-brackets"></div>
+            <span class="btn-text">{{ clockFormatText }}</span>
+          </button>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-label">OPERATING_MANUAL</div>
+          <a routerLink="/tutorial" class="tech-btn">
+            <div class="target-brackets"></div>
+            <lucide-icon [img]="Icons.HelpIcon" size="16"></lucide-icon>
+            <span class="btn-text">INITIATE TUTORIAL</span>
+          </a>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-label">SOURCE_CODE_ACCESS</div>
+          <a class="tech-btn" href="https://github.com/23Benji/desk-jarvis-ang" target="_blank">
+            <div class="target-brackets"></div>
+            <span class="btn-text">DESK JARVIS CORE</span>
+          </a>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-label">NEURAL_TRACKING_API</div>
+          <a class="tech-btn" href="https://github.com/mp3skater/AR-Hand-Tracker-Mouse" target="_blank">
+            <div class="target-brackets"></div>
+            <span class="btn-text">HAND TRACKING MODULE</span>
+          </a>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-label">FIRMWARE_BUILD</div>
+          <div class="tech-readout">v2.0.4 [ANGULAR_STABLE]</div>
+        </div>
+
+      </div>
     </div>
   </div>
 </div>

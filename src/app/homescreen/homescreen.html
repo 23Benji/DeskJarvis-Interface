@@ -1,28 +1,47 @@
 <div class="home-container">
+  <div class="parallax-grid"></div>
+  <div class="scanlines"></div>
+  <div class="vignette"></div>
 
-  <img src="/assets/images/Logo.svg" alt="Desk Jarvis" class="home-logo">
+  <div class="hud-wrapper">
+    <div class="system-status">
+      <span class="pulse-dot"></span> J.A.R.V.I.S. // SYSTEM_ONLINE
+    </div>
 
-  <p class="system-subtitle">Select a module to begin</p>
+    <div class="radial-menu">
 
-  <div class="menu-grid">
-    <a routerLink="/dashboard" class="menu-card">
-      <lucide-icon [img]="Icons.dashboard" size="48"></lucide-icon>
-      <span>Dashboard</span>
-    </a>
+      <div class="center-circle">
+        <div class="core-glow"></div>
+        <div class="ring outer-ring"></div>
+        <div class="ring inner-ring"></div>
+        <div class="ring data-ring"></div>
+        <img src="/assets/images/Logo.svg" alt="Desk Jarvis" class="home-logo-small">
+      </div>
 
-    <a routerLink="/games" class="menu-card">
-      <lucide-icon [img]="Icons.games" size="48"></lucide-icon>
-      <span>Games</span>
-    </a>
+      <a routerLink="/dashboard" class="menu-card option-1">
+        <div class="target-brackets"></div>
+        <lucide-icon [img]="Icons.dashboard" size="56"></lucide-icon>
+        <span>DASHBOARD</span>
+      </a>
 
-    <a routerLink="/matrix" class="menu-card">
-      <lucide-icon [img]="Icons.matrix" size="48"></lucide-icon>
-      <span>Matrix</span>
-    </a>
+      <a routerLink="/games" class="menu-card option-2">
+        <div class="target-brackets"></div>
+        <lucide-icon [img]="Icons.games" size="56"></lucide-icon>
+        <span>GAMES_HUB</span>
+      </a>
 
-    <a routerLink="/settings" class="menu-card">
-      <lucide-icon [img]="Icons.settings" size="48"></lucide-icon>
-      <span>Settings</span>
-    </a>
+      <a routerLink="/matrix" class="menu-card option-3">
+        <div class="target-brackets"></div>
+        <lucide-icon [img]="Icons.matrix" size="56"></lucide-icon>
+        <span>MATRIX_SIM</span>
+      </a>
+
+      <a routerLink="/settings" class="menu-card option-4">
+        <div class="target-brackets"></div>
+        <lucide-icon [img]="Icons.settings" size="56"></lucide-icon>
+        <span>CONFIG</span>
+      </a>
+
+    </div>
   </div>
 </div>

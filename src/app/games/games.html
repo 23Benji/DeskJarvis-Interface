@@ -1,31 +1,45 @@
 <div class="home-container">
+  <div class="parallax-grid"></div>
+  <div class="scanlines"></div>
+  <div class="vignette"></div>
 
-  <!-- Keep Home button as SPA navigation (optional, or change to href if you want that to refresh too) -->
   <a routerLink="/home" class="home-btn" title="Back to System">
-    <lucide-icon [img]="Icons.home" size="24"></lucide-icon>
+    <lucide-icon [img]="Icons.home" size="20"></lucide-icon>
+    <span>RETURN</span>
   </a>
 
-  <img src="/assets/images/GamesHub.svg" alt="Games Hub" class="games-logo">
+  <div class="hud-wrapper">
+    <div class="system-status">
+      <span class="pulse-dot"></span> SEC_OVERRIDE // GAMES_INITIALIZED
+    </div>
 
-  <p class="system-subtitle">Select a game to play</p>
+    <div class="radial-menu">
+      <div class="center-circle">
+        <div class="core-glow"></div>
+        <div class="ring outer-ring"></div>
+        <div class="ring inner-ring"></div>
+        <div class="ring data-ring"></div>
+        <img src="/assets/images/GamesHub.svg" alt="Games Hub" class="home-logo-small">
+      </div>
 
-  <div class="menu-grid">
-    <!-- 🟢 CHANGED: routerLink -> href (Forces Reload) -->
-    <a href="/games/duck" class="menu-card">
-      <lucide-icon [img]="Icons.duck" size="80"></lucide-icon>
-      <span>Duck Hunt</span>
-    </a>
+      <a href="/games/duck" class="menu-card option-1">
+        <div class="target-brackets"></div>
+        <lucide-icon [img]="Icons.duck" size="56"></lucide-icon>
+        <span>DUCK_HUNT</span>
+      </a>
 
-    <!-- 🟢 CHANGED: routerLink -> href (Forces Reload) -->
-    <a href="/games/tetris" class="menu-card">
-      <lucide-icon [img]="Icons.tetris" size="80"></lucide-icon>
-      <span>Tetris</span>
-    </a>
+      <a href="/games/tetris" class="menu-card option-2">
+        <div class="target-brackets"></div>
+        <lucide-icon [img]="Icons.tetris" size="56"></lucide-icon>
+        <span>TETRIS_SYS</span>
+      </a>
 
-    <!-- 🟢 CHANGED: routerLink -> href (Forces Reload) -->
-    <a href="/games/pong" class="menu-card">
-      <lucide-icon [img]="Icons.pong" size="80"></lucide-icon>
-      <span>Pong</span>
-    </a>
+      <a href="/games/pong" class="menu-card option-3">
+        <div class="target-brackets"></div>
+        <lucide-icon [img]="Icons.pong" size="56"></lucide-icon>
+        <span>PONG_V1</span>
+      </a>
+
+    </div>
   </div>
 </div>
