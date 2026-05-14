@@ -21,30 +21,14 @@ body {
 /* Base widget (for draggable items) */
 .widget {
   padding: 15px;
-  background-color: #0000005c;
+  background-color: transparent; /* Makes the wrapper invisible so only your styled components show */
   position: absolute;
   min-width: 200px;
+  cursor: grabbing; /* Shows the open hand icon when hovering over the widget */
 }
 
-.drag-handle {
-  position: absolute;
-  top: 7px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60px;
-  height: 15px;
-  border-radius: 3px;
-  background: #555;
-  cursor: grab;
-  opacity: 0.6;
-}
-
-.drag-handle:hover {
-  opacity: 0.9;
-}
-
-.drag-handle:active {
-  cursor: grabbing;
+.widget:active {
+  cursor: grabbing; /* Shows the closed hand icon while dragging */
 }
 
 
