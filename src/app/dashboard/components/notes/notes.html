@@ -1,13 +1,20 @@
 <div class="notes-widget">
+
+  <div class="notes-header">
+    <span class="header-title">REMINDERS</span>
+    <span class="header-line"></span>
+  </div>
+
   <div class="notes-container">
     <ul>
-      <li *ngFor="let note of notes">
-        <strong style="color: white; display: block; margin-bottom: 4px;">
-          {{ note.title }}
-        </strong>
-
-        <span style="color: #aaa;">{{ note.description }}</span>
+      <li *ngFor="let note of notes" class="note-item">
+        <div class="note-bullet"></div>
+        <div class="note-content">
+          <span class="note-title">{{ note.title }}</span>
+          <span class="note-desc">{{ note.description }}</span>
+        </div>
       </li>
     </ul>
   </div>
+
 </div>
