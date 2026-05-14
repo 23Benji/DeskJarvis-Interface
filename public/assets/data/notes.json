@@ -1,14 +1,14 @@
 [
   {
     "title": "Einkaufsliste",
-    "description": "Milch\nBrot\nÄpfel\nNudeln"
+    "description": "Milch, Brot, Äpfel, Nudeln"
   },
   {
     "title": "Meeting 15:00",
-    "description": "Projektstatus besprechen\nNächste Schritte planen\nBudget checken"
+    "description": "Projektstatus besprechen, Nächste Schritte planen, Budget checken"
   },
   {
     "title": "Urlaub Rom",
-    "description": "Tag 1: Kolosseum\nTag 2: Vatikan\nTag 3: Trevibrunnen"
+    "description": "Tag 1: Kolosseum, Tag 2: Vatikan, Tag 3: Trevibrunnen"
   }
 ]
