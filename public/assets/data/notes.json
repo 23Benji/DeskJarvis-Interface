@@ -1,7 +1,14 @@
 [
-  { "title": "Project Jarvis", "description": "Initial notes for Project Jarvis." },
-  { "title": "Grocery List" },
-  { "title": "Workout Plan" },
-  { "title": "Meeting Notes" },
-  { "title": "Travel Itinerary" }
+  {
+    "title": "Einkaufsliste",
+    "description": "Milch\nBrot\nÄpfel\nNudeln"
+  },
+  {
+    "title": "Meeting 15:00",
+    "description": "Projektstatus besprechen\nNächste Schritte planen\nBudget checken"
+  },
+  {
+    "title": "Urlaub Rom",
+    "description": "Tag 1: Kolosseum\nTag 2: Vatikan\nTag 3: Trevibrunnen"
+  }
 ]
