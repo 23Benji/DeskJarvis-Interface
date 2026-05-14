@@ -116,148 +116,6 @@ body {
 }
 
 
-
-/* ────────────────────────────── */
-/* 🕒 CLOCK WIDGET STYLING        */
-/* ────────────────────────────── */
-.clock-widget {
-  font-family: 'Orbitron', monospace;
-  color: #fff;
-  padding: 20px;
-  text-align: center;
-  width: 370px;
-  max-width: 90vw;
-  height: auto;
-  box-sizing: border-box;
-  overflow: hidden;
-}
-
-/* Header bar (menu + title) */
-.menu-bar {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 10px;
-  position: relative;
-  margin-bottom: 10px;
-}
-
-.menu-icon {
-  background: transparent;
-  border: none;
-  color: #fff;
-  cursor: pointer;
-  padding: 2px;
-  transition: 0.2s;
-  display: flex;
-  align-items: center;
-}
-
-.menu-icon:hover {
-  color: #ccc;
-}
-
-/* Title beside hamburger */
-.clock-title {
-  font-family: 'Orbitron', monospace;
-  font-size: 1.2em;
-  color: #fff;
-  text-shadow: 0 0 6px #888;
-}
-
-/* Dropdown menu */
-.dropdown-menu {
-  position: absolute;
-  top: 30px;
-  left: 0;
-  background: rgba(0, 0, 0, 0.95);
-  border: 1px solid #fff;
-  border-radius: 8px;
-  box-shadow: 0 0 15px #fff;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3px 6px;
-  padding: 6px 8px;
-  z-index: 99999;
-  animation: fadeIn 0.2s ease-in-out;
-  width: 200px;
-}
-
-.dropdown-menu button {
-  background: transparent;
-  border: none;
-  color: #fff;
-  padding: 4px 6px;
-  text-align: center;
-  cursor: pointer;
-  font-family: 'Orbitron', monospace;
-  font-size: 0.9em;
-  transition: 0.2s;
-  border-radius: 4px;
-}
-
-.dropdown-menu button:hover,
-.dropdown-menu button.active {
-  color: #000;
-  background: #fff;
-  text-shadow: none;
-}
-
-/* Main clock display */
-.clock-display {
-  font-size: 2.8em;
-  margin-top: 15px;
-  width: 100%;
-  text-align: center;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-/* Control buttons */
-button {
-  background: transparent;
-  border: 1px solid #fff;
-  color: #fff;
-  border-radius: 5px;
-  margin: 5px;
-  padding: 5px 10px;
-  cursor: pointer;
-  font-family: inherit;
-  transition: 0.2s;
-}
-
-button:hover {
-  background: #fff;
-  color: #000;
-}
-
-/* Range slider for timer */
-input[type='range'] {
-  width: 100%;
-  margin-top: 10px;
-  cursor: pointer;
-}
-
-.button-row {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 5px;
-}
-
-/* Smooth fade-in for dropdown */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-5px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 /* ────────────────────────────── */
 /* 🗒 TO-DO WIDGET STYLING        */
 /* ────────────────────────────── */
@@ -382,166 +240,86 @@ input[type='range'] {
 
 
 /* ────────────────────────────── */
-/* 🎵 OFFLINE MUSIC PLAYER        */
-/* ────────────────────────────── */
-.music-horizontal {
-  width: 340px;
-  height: 160px;
-  color: #fff;
-  font-family: 'Orbitron', monospace;
-  padding: 12px 18px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.music-title {
-  font-size: 1em;
-  margin-bottom: 4px;
-}
-
-.music-artist {
-  opacity: 0.7;
-}
-
-.music-controls {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  font-size: 1.5em;
-}
-
-.music-controls button {
-  background: transparent;
-  border: none;
-  color: #fff;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.music-controls button:hover {
-  transform: scale(1.1);
-  color: #ccc;
-}
-
-.music-progress {
-  margin-top: 8px;
-}
-
-.bar {
-  width: 100%;
-  height: 4px;
-  background: #222;
-  border-radius: 3px;
-  overflow: hidden;
-}
-
-.bar-fill {
-  height: 100%;
-  background: #fff;
-  transition: width 0.15s linear;
-}
-
-.time {
-  text-align: center;
-  font-size: 0.8em;
-  margin-top: 5px;
-  opacity: 0.8;
-}
-.music-mode-btns {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin-bottom: 10px;
-}
-
-.music-mode-btns button {
-  background: transparent;
-  border: 1px solid white;
-  color: white;
-  border-radius: 5px;
-  padding: 4px 10px;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.music-mode-btns button.active {
-  background: white;
-  color: black;
-}
-
-.music-mode-btns button:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-}
-
-
-/* ────────────────────────────── */
 /* 🧰 SMART TOOLBOX FINAL STYLE   */
 /* ────────────────────────────── */
 .toolbox {
   position: fixed;
   top: 50%;
-  right: -60px;
+  right: -100px; /* Pushed further off-screen when hidden */
   transform: translateY(-50%);
-  width: 50px;
-  background: rgba(255, 255, 255, 0.05);
-  border-left: 1px solid #fff;
-  backdrop-filter: blur(5px);
-  padding: 8px 0;
-  transition: right 0.4s ease, opacity 0.4s ease;
+  width: 85px; /* Wider to accommodate massive gesture buttons */
+
+  /* Matches the pure Black & White system aesthetic */
+  background: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-right: none; /* Keeps it flush against the edge of the screen */
+  border-radius: 12px 0 0 12px;
+  box-shadow: -5px 0 20px rgba(255, 255, 255, 0.05); /* Faint ambient glow */
+
+  padding: 20px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 15px; /* Ample spacing to prevent misclicks */
   z-index: 9999;
-  border-radius: 10px 0 0 10px;
   opacity: 0;
   pointer-events: none;
+
+  /* Snappy, futuristic slide-in curve */
+  transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
 }
 
-/* Visible state (fade + slide) */
+/* Visible state */
 .toolbox.visible {
   right: 0;
   opacity: 1;
   pointer-events: all;
 }
 
-/* Individual icon button */
-.toolbox-icon {
-  width: 36px;
-  height: 36px;
-  border: 1px solid #fff;
-  color: #fff;
-  border-radius: 8px;
+/* 🔹 Glowing Edge Handle (Hint that the menu is there) */
+.toolbox::before {
+  content: '';
+  position: absolute;
+  left: -2px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 60px;
+  background: #ffffff;
+  opacity: 0.6;
+  box-shadow: 0 0 10px #ffffff;
+  transition: opacity 0.4s ease;
+}
+
+.toolbox.visible::before {
+  opacity: 0.1; /* Dims when the menu is open */
+}
+
+/* Individual Tool Buttons (Optimized for Gestures) */
+.tool-btn {
+  width: 55px;  /* Massive hit target */
+  height: 55px; /* Massive hit target */
+
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  border-radius: 50%; /* Matches the circular controls of the clock/audio */
+
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.2s ease;
+  transition: all 0.2s ease-in-out;
 }
 
-.toolbox-icon:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: scale(1.1);
+.tool-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #ffffff;
+  color: #ffffff;
+  transform: scale(1.15); /* Crucial visual feedback for hand tracking */
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
 }
 
-/* 🔹 Glowing handle line */
-.toolbox-handle {
-  position: absolute;
-  left: -3px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 3px;
-  height: 80px;
-  background: white;
-  opacity: 0.4;
-  border-radius: 3px;
-  box-shadow: 0 0 8px white;
-  transition: opacity 0.3s ease;
-}
-
-.toolbox.visible .toolbox-handle {
-  opacity: 0.1;
-  /* fades when open */
+.tool-btn:active {
+  transform: scale(0.95);
 }

@@ -1,6 +1,16 @@
 import { Component, OnDestroy, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LucideAngularModule, Menu } from 'lucide-angular';
+import {
+  LucideAngularModule,
+  Clock as ClockIcon,
+  Timer as StopwatchIcon,
+  Hourglass,
+  Target,
+  Play,
+  Pause,
+  RotateCcw,
+  BellOff
+} from 'lucide-angular';
 
 @Component({
   selector: 'app-clock',
@@ -12,7 +22,6 @@ import { LucideAngularModule, Menu } from 'lucide-angular';
 export class ClockComponent implements OnInit, OnDestroy {
   // Logic State
   activeTab: string = 'clock';
-  menuOpen: boolean = false;
   time: Date = new Date();
 
   // Timer/Stopwatch State
@@ -23,7 +32,7 @@ export class ClockComponent implements OnInit, OnDestroy {
 
   // Alarm State
   isAlarmRinging: boolean = false;
-  private alarmAudio = new Audio('assets/sounds/ui-appear.wav'); // Uses your existing sound
+  private alarmAudio = new Audio('assets/sounds/ui-appear.wav');
 
   // Clock format preference
   use12HourFormat: boolean = true;
@@ -32,93 +41,70 @@ export class ClockComponent implements OnInit, OnDestroy {
   private clockInterval: any;
   private activeInterval: any;
 
-  // Icons for template
-  readonly MenuIcon = Menu;
+  // Export Icons for Template (Aliased to avoid naming conflicts)
+  readonly Icons = {
+    Clock: ClockIcon,
+    Stopwatch: StopwatchIcon,
+    Timer: Hourglass,
+    Pomodoro: Target,
+    Play,
+    Pause,
+    Reset: RotateCcw,
+    StopAlarm: BellOff
+  };
 
   ngOnInit() {
-    // Set alarm to loop until stopped manually
     this.alarmAudio.loop = true;
-
-    // Load clock format preference
     this.loadClockFormatPreference();
-
-    // Start the main clock tick immediately
     this.clockInterval = setInterval(() => {
       this.time = new Date();
     }, 1000);
-
-    // Listen for format changes from settings
     window.addEventListener('clockFormatChanged', this.handleFormatChange);
   }
 
   ngOnDestroy() {
-    // Cleanup intervals when widget is removed
     if (this.clockInterval) clearInterval(this.clockInterval);
     this.clearActiveInterval();
-    this.stopAlarm(); // Ensure sound stops if widget is closed
-
-    // Remove event listener
+    this.stopAlarm();
     window.removeEventListener('clockFormatChanged', this.handleFormatChange);
   }
 
-  // Load clock format from localStorage
   private loadClockFormatPreference() {
     const saved = localStorage.getItem('clockFormat');
     this.use12HourFormat = saved === null ? true : saved === '12';
   }
 
-  // Handle format change events
   private handleFormatChange = (event: any) => {
     this.use12HourFormat = event.detail.use12Hour;
   };
 
-  // Format time based on user preference
   get formattedTime(): string {
     const hours = this.time.getHours();
     const minutes = this.time.getMinutes().toString().padStart(2, '0');
-    const seconds = this.time.getSeconds().toString().padStart(2, '0');
 
     if (this.use12HourFormat) {
-      // 12-hour format with AM/PM
       const period = hours >= 12 ? 'PM' : 'AM';
-      const displayHours = hours % 12 || 12; // Convert 0 to 12 for midnight
-      return `${displayHours}:${minutes}:${seconds} ${period}`;
+      const displayHours = hours % 12 || 12;
+      return `${displayHours}:${minutes} ${period}`;
     } else {
-      // 24-hour format
       const displayHours = hours.toString().padStart(2, '0');
-      return `${displayHours}:${minutes}:${seconds}`;
+      return `${displayHours}:${minutes}`;
     }
   }
 
-  // -- Helper to format seconds to MM:SS --
   formatTime(seconds: number): string {
     const m = Math.floor(seconds / 60).toString().padStart(2, '0');
     const s = (seconds % 60).toString().padStart(2, '0');
     return `${m}:${s}`;
   }
 
-  // -- Switching Tabs --
   switchTab(tab: string) {
     this.running = false;
     this.activeTab = tab;
-    this.menuOpen = false;
     this.clearActiveInterval();
-    this.stopAlarm(); // Stop alarm if user switches tabs
+    this.stopAlarm();
   }
 
-  // Stop propagation here so the document click listener doesn't immediately close it
-  toggleMenu(event: Event) {
-    event.stopPropagation();
-    this.menuOpen = !this.menuOpen;
-  }
-
-  // Listens for clicks anywhere on the page to close the menu
-  @HostListener('document:click')
-  closeMenu() {
-    this.menuOpen = false;
-  }
-
-  // -- Alarm Logic --
   private triggerAlarm() {
     this.isAlarmRinging = true;
     this.running = false;
@@ -129,10 +115,9 @@ export class ClockComponent implements OnInit, OnDestroy {
   stopAlarm() {
     this.isAlarmRinging = false;
     this.alarmAudio.pause();
-    this.alarmAudio.currentTime = 0; // Reset audio to beginning
+    this.alarmAudio.currentTime = 0;
   }
 
-  // -- Start/Pause Logic --
   toggleRunning() {
     this.running = !this.running;
     if (this.running) {
@@ -147,28 +132,20 @@ export class ClockComponent implements OnInit, OnDestroy {
   }
 
   private startActiveTimer() {
-    this.clearActiveInterval(); // ensure no duplicates
-
+    this.clearActiveInterval();
     this.activeInterval = setInterval(() => {
       if (this.activeTab === 'stopwatch') {
         this.stopwatch++;
       } else if (this.activeTab === 'timer') {
-        if (this.timer > 0) {
-          this.timer--;
-        } else {
-          this.triggerAlarm();
-        }
+        if (this.timer > 0) this.timer--;
+        else this.triggerAlarm();
       } else if (this.activeTab === 'pomodoro') {
-        if (this.pomodoro > 0) {
-          this.pomodoro--;
-        } else {
-          this.triggerAlarm();
-        }
+        if (this.pomodoro > 0) this.pomodoro--;
+        else this.triggerAlarm();
       }
     }, 1000);
   }
 
-  // -- Reset Handlers --
   resetStopwatch() {
     this.stopwatch = 0;
     this.running = false;

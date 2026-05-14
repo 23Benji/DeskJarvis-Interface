@@ -1,63 +1,177 @@
-/* Container for the action buttons */
-.button-row {
+/* ────────────────────────────── */
+/* ⏱️ SYSTEM CLOCK WIDGET         */
+/* ────────────────────────────── */
+.sys-clock-widget {
+  width: 380px;
+  min-height: 160px; /* Keeps it strictly compact */
+  font-family: 'Orbitron', monospace;
+  color: #ffffff;
+  background-color: #00000000;
+  border-radius: 8px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- NAVIGATION BAR --- */
+.clock-nav {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.nav-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  padding: 10px 0;
+  transition: all 0.2s ease;
   display: flex;
   justify-content: center;
-  flex-wrap: wrap; /* Allows the 30s, 60s buttons to wrap to a new line if needed */
-  gap: 20px; /* CRUCIAL: Adds wide spacing between buttons to prevent misclicks */
-  margin-top: 25px;
-}
 
-/* The actual Start, Pause, Reset, and time-setter buttons */
-.button-row button {
-  font-size: 1.2rem; /* Large, easy-to-read text */
-  font-family: inherit;
-  min-width: 100px; /* Ensures even short words like 'Start' have a wide button */
-  border-radius: 12px;
-  cursor: pointer;
-}
-
-/* Hover/Focus effect for visual feedback (very important for hand tracking!) */
-.button-row button:hover,
-.button-row button:focus {
-  background: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
-  transform: scale(1.05); /* Makes the button pop out when hovered */
-}
-/* --- ALARM BLINKING ANIMATION --- */
-@keyframes blink-animation {
-  0% {
-    opacity: 1;
-    color: #ff3333;
-    text-shadow: 0 0 20px #ff3333;
-  }
-  50% {
-    opacity: 0.5;
+  &:hover {
     color: #ffffff;
-    text-shadow: none;
+    transform: scale(1.1);
   }
-  100% {
-    opacity: 1;
-    color: #ff3333;
-    text-shadow: 0 0 20px #ff3333;
+
+  &.active {
+    color: #ffffff;
+    filter: drop-shadow(0 0 8px #ffffff);
   }
+}
+
+/* --- MAIN DISPLAY AREA --- */
+.mode-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 1;
+  justify-content: center;
+}
+
+/* Horizontal layout: Side Button - Time - Side Button */
+.center-stage {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 10px;
+}
+
+.massive-time {
+  font-size: 3.5rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-align: center;
+  flex-grow: 1;
+}
+
+.sys-label {
+  font-size: 0.7rem;
+  letter-spacing: 3px;
+  opacity: 0.5;
+  margin-top: 10px;
+}
+
+/* --- SIDE BUTTONS (MASSIVE HIT AREAS) --- */
+.side-btn {
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  background: transparent;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #ffffff;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &.primary {
+    border-width: 2px;
+    border-color: rgba(255, 255, 255, 0.6);
+  }
+}
+
+/* --- TIMER PRESETS --- */
+.preset-row {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+  width: 100%;
+}
+
+.preset-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #ffffff;
+    color: #000000;
+    transform: scale(1.1);
+  }
+}
+
+/* --- ALARM ANIMATION & STOP BUTTON --- */
+.alarm-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+}
+
+@keyframes blink-animation {
+  0%, 100% { opacity: 1; text-shadow: 0 0 20px #ffffff; }
+  50% { opacity: 0.3; text-shadow: none; }
 }
 
 .blinking {
-  animation: blink-animation 1s infinite;
+  animation: blink-animation 0.8s infinite;
 }
 
-/* --- STOP ALARM BUTTON --- */
 .stop-alarm-btn {
-  background: rgba(255, 0, 0, 0.2) !important;
-  color: #ff3333 !important;
-  border: 2px solid #ff3333 !important;
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: none;
   font-weight: bold;
-  min-width: 200px !important; /* Make it extra large for easy clicking */
-  padding: 20px !important;
-  box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
-}
+  font-size: 1.2rem;
+  width: 90%;
+  padding: 15px !important;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+  transition: all 0.2s ease;
 
-.stop-alarm-btn:hover {
-  background: rgba(255, 0, 0, 0.5) !important;
-  box-shadow: 0 0 30px rgba(255, 0, 0, 0.6);
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
+  }
 }

@@ -1,62 +1,77 @@
-<div class="clock-widget">
-  <div class="menu-bar">
-    <div class="dropdown-menu" *ngIf="menuOpen" (click)="$event.stopPropagation()">
-      <button *ngFor="let tab of ['clock', 'stopwatch', 'timer', 'pomodoro']"
-              (click)="switchTab(tab)"
-              [class.active]="activeTab === tab">
-        {{ tab | titlecase }}
+<div class="sys-clock-widget">
+
+  <div class="clock-nav">
+    <button class="nav-btn" [class.active]="activeTab === 'clock'" (click)="switchTab('clock')">
+      <lucide-icon [img]="Icons.Clock" size="22"></lucide-icon>
+    </button>
+    <button class="nav-btn" [class.active]="activeTab === 'stopwatch'" (click)="switchTab('stopwatch')">
+      <lucide-icon [img]="Icons.Stopwatch" size="22"></lucide-icon>
+    </button>
+    <button class="nav-btn" [class.active]="activeTab === 'timer'" (click)="switchTab('timer')">
+      <lucide-icon [img]="Icons.Timer" size="22"></lucide-icon>
+    </button>
+    <button class="nav-btn" [class.active]="activeTab === 'pomodoro'" (click)="switchTab('pomodoro')">
+      <lucide-icon [img]="Icons.Pomodoro" size="22"></lucide-icon>
+    </button>
+  </div>
+
+  <div class="mode-container" *ngIf="activeTab === 'clock'">
+    <div class="center-stage">
+      <div class="massive-time">{{ formattedTime }}</div>
+    </div>
+    <div class="sys-label">LOCAL_SYS_TIME</div>
+  </div>
+
+  <div class="mode-container" *ngIf="activeTab === 'stopwatch'">
+    <div class="center-stage">
+      <button class="side-btn" (click)="resetStopwatch()"><lucide-icon [img]="Icons.Reset" size="28"></lucide-icon></button>
+      <div class="massive-time">{{ formatTime(stopwatch) }}</div>
+      <button class="side-btn primary" (click)="toggleRunning()">
+        <lucide-icon [img]="running ? Icons.Pause : Icons.Play" size="28"></lucide-icon>
+      </button>
+    </div>
+    <div class="sys-label">ELAPSED_TIME</div>
+  </div>
+
+  <div class="mode-container" *ngIf="activeTab === 'timer'">
+    <div class="center-stage" *ngIf="!isAlarmRinging">
+      <button class="side-btn" (click)="resetTimer()"><lucide-icon [img]="Icons.Reset" size="28"></lucide-icon></button>
+      <div class="massive-time">{{ formatTime(timer) }}</div>
+      <button class="side-btn primary" (click)="toggleRunning()">
+        <lucide-icon [img]="running ? Icons.Pause : Icons.Play" size="28"></lucide-icon>
+      </button>
+    </div>
+
+    <div class="preset-row" *ngIf="!isAlarmRinging">
+      <button *ngFor="let sec of [30, 60, 300, 600, 900]" class="preset-btn" (click)="setTimer(sec)">
+        {{ sec < 60 ? sec + 's' : (sec / 60) + 'm' }}
+      </button>
+    </div>
+
+    <div *ngIf="isAlarmRinging" class="alarm-state">
+      <div class="massive-time blinking">{{ formatTime(timer) }}</div>
+      <button class="stop-alarm-btn" (click)="stopAlarm()">
+        <lucide-icon [img]="Icons.StopAlarm" size="24"></lucide-icon> STOP
       </button>
     </div>
   </div>
 
-  <div class="clock-display">
-    <button class="menu-icon" (click)="toggleMenu($event)">
-      <lucide-icon [img]="MenuIcon" size="30"></lucide-icon>
-    </button>
-
-    <div *ngIf="activeTab === 'clock'">
-      {{ formattedTime }}
+  <div class="mode-container" *ngIf="activeTab === 'pomodoro'">
+    <div class="center-stage" *ngIf="!isAlarmRinging">
+      <button class="side-btn" (click)="resetPomodoro()"><lucide-icon [img]="Icons.Reset" size="28"></lucide-icon></button>
+      <div class="massive-time">{{ formatTime(pomodoro) }}</div>
+      <button class="side-btn primary" (click)="toggleRunning()">
+        <lucide-icon [img]="running ? Icons.Pause : Icons.Play" size="28"></lucide-icon>
+      </button>
     </div>
+    <div class="sys-label" *ngIf="!isAlarmRinging">FOCUS_MODE</div>
 
-    <div *ngIf="activeTab === 'stopwatch'">
-      <div>{{ formatTime(stopwatch) }}</div>
-      <div class="button-row">
-        <button (click)="toggleRunning()">{{ running ? 'Pause' : 'Start' }}</button>
-        <button (click)="resetStopwatch()">Reset</button>
-      </div>
+    <div *ngIf="isAlarmRinging" class="alarm-state">
+      <div class="massive-time blinking">{{ formatTime(pomodoro) }}</div>
+      <button class="stop-alarm-btn" (click)="stopAlarm()">
+        <lucide-icon [img]="Icons.StopAlarm" size="24"></lucide-icon> STOP
+      </button>
     </div>
-
-    <div *ngIf="activeTab === 'timer'">
-      <div [class.blinking]="isAlarmRinging">{{ formatTime(timer) }}</div>
-
-      <div class="preset-grid">
-        <button *ngFor="let sec of [30, 60, 300, 600, 900]" (click)="setTimer(sec)" [disabled]="isAlarmRinging">
-          {{ sec < 60 ? sec + 's' : (sec / 60) + 'm' }}
-        </button>
-      </div>
-
-      <div class="action-row" *ngIf="!isAlarmRinging">
-        <button (click)="toggleRunning()">{{ running ? 'Pause' : 'Start' }}</button>
-        <button (click)="resetTimer()">Reset</button>
-      </div>
-
-      <div class="action-row" *ngIf="isAlarmRinging">
-        <button class="stop-alarm-btn" (click)="stopAlarm()">STOP ALARM</button>
-      </div>
-    </div>
-
-    <div *ngIf="activeTab === 'pomodoro'">
-      <div [class.blinking]="isAlarmRinging">{{ formatTime(pomodoro) }}</div>
-
-      <div class="button-row" *ngIf="!isAlarmRinging">
-        <button (click)="toggleRunning()">{{ running ? 'Pause' : 'Start' }}</button>
-        <button (click)="resetPomodoro()">Reset</button>
-      </div>
-
-      <div class="button-row" *ngIf="isAlarmRinging">
-        <button class="stop-alarm-btn" (click)="stopAlarm()">STOP ALARM</button>
-      </div>
-    </div>
-
   </div>
+
 </div>
