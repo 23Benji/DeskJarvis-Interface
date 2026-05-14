@@ -81,7 +81,7 @@ function setupScenes() {
       k.text("ENTER:\nDrop", { size: 10 }),
       k.pos(BOARD_WIDTH * BLOCK_SIZE + 10, 120),
     ]);
-    
+
     let currentPiece = spawnPiece();
     let dropTimer = 0;
     const dropInterval = 0.5;
@@ -102,11 +102,11 @@ function setupScenes() {
         applyPause();
         if (hoverPaused) return;
       }
-      
+
       const logicMouseX = Math.min(Math.max(0, mPos.x), BOARD_WIDTH * BLOCK_SIZE);
-      
+
       let targetCol = Math.floor(logicMouseX / BLOCK_SIZE);
-      
+
       const shapeW = currentPiece.shape[0].length;
       if (targetCol < 0) targetCol = 0;
       if (targetCol + shapeW > BOARD_WIDTH) targetCol = BOARD_WIDTH - shapeW;
@@ -170,7 +170,6 @@ function setupScenes() {
               width: BLOCK_SIZE - 1,
               height: BLOCK_SIZE - 1,
               pos: k.vec2(x * BLOCK_SIZE, y * BLOCK_SIZE),
-              // 🛠️ FIX: Use Hex Converter
               color: hexToKColor(gameManager.board[y][x]),
             });
           }
@@ -185,20 +184,20 @@ function setupScenes() {
   });
 }
 
-// 🛠️ FIX: Helper to convert Hex String to Kaplay RGB
+// 🛠️ THE FIX: Use k.rgb() instead of k.color() for raw drawing
 function hexToKColor(hex: string | null) {
-  if (!hex) return k.color(0, 0, 0) as any;
+  if (!hex) return k.rgb(0, 0, 0);
   const r = parseInt(hex.substring(1, 3), 16);
   const g = parseInt(hex.substring(3, 5), 16);
   const b = parseInt(hex.substring(5, 7), 16);
-  return k.color(r, g, b) as any;
+  return k.rgb(r, g, b);
 }
 
 function spawnPiece(): TetrisPiece {
   const typeId = Math.floor(Math.random() * TETROMINOES.length);
   const template = TETROMINOES[typeId];
   const shape = template.shape.map(row => [...row]);
-  
+
   return {
     shape: shape,
     color: template.color,
@@ -209,7 +208,7 @@ function spawnPiece(): TetrisPiece {
 
 function rotatePiece(piece: TetrisPiece) {
   const originalShape = piece.shape;
-  const newShape = piece.shape[0].map((val, index) => 
+  const newShape = piece.shape[0].map((val, index) =>
     piece.shape.map(row => row[index]).reverse()
   );
 
@@ -217,13 +216,13 @@ function rotatePiece(piece: TetrisPiece) {
 
   if (checkCollision(piece)) {
     if (!checkCollision(piece, -1, 0)) {
-        piece.x--;
-    } 
+      piece.x--;
+    }
     else if (!checkCollision(piece, 1, 0)) {
-        piece.x++;
-    } 
+      piece.x++;
+    }
     else {
-        piece.shape = originalShape;
+      piece.shape = originalShape;
     }
   }
 }
@@ -246,12 +245,12 @@ function checkCollision(piece: TetrisPiece, offX = 0, offY = 0) {
 
 function lockPiece(piece: TetrisPiece) {
   const { shape, x, y, color } = piece;
-  
+
   for (let row = 0; row < shape.length; row++) {
     for (let col = 0; col < shape[row].length; col++) {
       if (shape[row][col]) {
         if (y + row >= 0) {
-           gameManager.board[y + row][x + col] = color;
+          gameManager.board[y + row][x + col] = color;
         }
       }
     }
@@ -263,13 +262,13 @@ function lockPiece(piece: TetrisPiece) {
       gameManager.board.splice(r, 1);
       gameManager.board.unshift(Array(BOARD_WIDTH).fill(null));
       linesCleared++;
-      r++; 
+      r++;
     }
   }
-  
+
   if (linesCleared > 0) {
-      gameManager.score += linesCleared * 100 * linesCleared;
-      k.shake(linesCleared * 2);
+    gameManager.score += linesCleared * 100 * linesCleared;
+    k.shake(linesCleared * 2);
   }
 }
 
@@ -278,11 +277,10 @@ function drawMatrix(matrix: any[][], offsetX: number, offsetY: number, colorHex:
     row.forEach((value, c) => {
       if (value) {
         k.drawRect({
-            width: BLOCK_SIZE - 1,
-            height: BLOCK_SIZE - 1,
-            pos: k.vec2((offsetX + c) * BLOCK_SIZE, (offsetY + r) * BLOCK_SIZE),
-            // 🛠️ FIX: Use Hex Converter
-            color: hexToKColor(colorHex)
+          width: BLOCK_SIZE - 1,
+          height: BLOCK_SIZE - 1,
+          pos: k.vec2((offsetX + c) * BLOCK_SIZE, (offsetY + r) * BLOCK_SIZE),
+          color: hexToKColor(colorHex)
         });
       }
     });
@@ -338,10 +336,10 @@ function gameOver() {
     gameManager.isGamePaused = false;
   }
   k.add([
-      k.text("GAME OVER", { size: 32 }),
-      k.anchor("center"),
-      k.pos(BOARD_WIDTH * BLOCK_SIZE / 2, BOARD_HEIGHT * BLOCK_SIZE / 2),
-      k.color(255, 0, 0)
+    k.text("GAME OVER", { size: 32 }),
+    k.anchor("center"),
+    k.pos(BOARD_WIDTH * BLOCK_SIZE / 2, BOARD_HEIGHT * BLOCK_SIZE / 2),
+    k.color(255, 0, 0)
   ]);
   k.add([
     k.text("Click to restart", { size: 16 }),
