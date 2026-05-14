@@ -1,0 +1,35 @@
+/* Add this to your music-player.scss file to enlarge the buttons for gesture controls */
+
+.music-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 25px; /* Adds critical space between buttons to prevent misclicks */
+  margin: 20px 0; /* Gives some breathing room above and below */
+
+  button {
+    /* Create a massive hit area */
+    min-width: 70px;
+    min-height: 70px;
+    padding: 15px;
+
+    /* Enlarge the actual text/icons */
+    font-size: 32px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+
+    &:hover {
+      background: rgba(56, 56, 56, 0.2);
+      border-color: #ffffff;
+      box-shadow: 0 0 20px rgba(124, 124, 124, 0.6);
+      transform: scale(1.15); /* Gives visual feedback when hovered by the hand tracker */
+    }
+
+    &:active {
+      transform: scale(0.95); /* Squish effect when actually clicked */
+    }
+  }
+}
