@@ -1,20 +1,37 @@
-<div class="music-horizontal">
-  <p class="music-title">
-    {{ currentTrack.title }} – <span class="music-artist">{{ currentTrack.artist }}</span>
-  </p>
+<div class="music-widget">
+
+  <div class="music-header">
+    <lucide-icon [img]="Icons.Disc3" size="16" class="spin-icon" [class.paused]="!playing"></lucide-icon>
+    <span class="header-title">AUDIO_LINK</span>
+    <span class="header-line"></span>
+  </div>
+
+  <div class="music-info">
+    <div class="music-title">{{ currentTrack.title | uppercase }}</div>
+    <div class="music-artist">{{ currentTrack.artist | uppercase }}</div>
+  </div>
 
   <div class="music-controls">
-    <button (click)="prevTrack()">⏮</button>
-    <button (click)="togglePlay()">{{ playing ? '❚❚' : '▶' }}</button>
-    <button (click)="nextTrack()">⏭</button>
+    <button (click)="prevTrack()" class="ctrl-btn">
+      <lucide-icon [img]="Icons.SkipBack" size="28" strokeWidth="1.5"></lucide-icon>
+    </button>
+
+    <button (click)="togglePlay()" class="ctrl-btn play-btn">
+      <lucide-icon [img]="playing ? Icons.Pause : Icons.Play" size="34" strokeWidth="1.5"></lucide-icon>
+    </button>
+
+    <button (click)="nextTrack()" class="ctrl-btn">
+      <lucide-icon [img]="Icons.SkipForward" size="28" strokeWidth="1.5"></lucide-icon>
+    </button>
   </div>
 
   <div class="music-progress">
     <div class="bar">
       <div class="bar-fill" [style.width]="progressWidth"></div>
     </div>
-    <div class="time">
-      {{ formatTime(currentTime) }} / {{ formatTime(duration) }}
+    <div class="time-readout">
+      <span>{{ formatTime(currentTime) }}</span>
+      <span>{{ formatTime(duration) }}</span>
     </div>
   </div>
 

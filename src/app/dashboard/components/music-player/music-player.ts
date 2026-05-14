@@ -1,15 +1,19 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { LucideAngularModule, Play, Pause, SkipBack, SkipForward, Disc3 } from 'lucide-angular';
 
 @Component({
   selector: 'app-music-player',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LucideAngularModule],
   templateUrl: './music-player.html',
   styleUrl: './music-player.scss'
 })
 export class MusicPlayerComponent {
   @ViewChild('audioPlayer') audioRef!: ElementRef<HTMLAudioElement>;
+
+  // Export icons to use in the template
+  readonly Icons = { Play, Pause, SkipBack, SkipForward, Disc3 };
 
   playlist = [
     { title: 'LoFi', artist: 'Desk Jarvis', src: '/assets/music/track1.mp3' },
@@ -48,7 +52,6 @@ export class MusicPlayerComponent {
 
   autoPlay() {
     this.playing = true;
-    // Wait a tiny bit for the src to update
     setTimeout(() => this.audioRef.nativeElement.play(), 50);
   }
 
