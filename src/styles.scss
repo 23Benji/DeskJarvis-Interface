@@ -47,16 +47,27 @@ body {
   cursor: grabbing;
 }
 
-.hide-btn{
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  background: transparent;
-  border: none;
-  color: #fff;
-  font-size: 1.2em;
-  cursor: pointer;
-  opacity: 0.6;
+
+/* 🗑️ TRASH / DISMISS DROP ZONE VISUAL FEEDBACK */
+.toolbox.trash-hover {
+  right: 0 !important; /* Force open */
+  background: rgba(255, 0, 0, 0.15); /* Red danger tint */
+  border-color: #ff3333;
+  box-shadow: -10px 0 30px rgba(255, 0, 0, 0.4);
+
+  /* The glowing edge line turns into a hot red warning line */
+  &::before {
+    background: #ff3333;
+    box-shadow: 0 0 15px #ff3333;
+    opacity: 0.9;
+  }
+
+  /* Fade out the icons so they look like they are in the background */
+  .tool-btn {
+    border-color: rgba(255, 51, 51, 0.3);
+    color: rgba(255, 51, 51, 0.4);
+    pointer-events: none; /* Prevents button hover effects while dragging */
+  }
 }
 
 /* ────────────────────────────── */

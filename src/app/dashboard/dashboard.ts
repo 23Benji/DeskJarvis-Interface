@@ -1,6 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DragDropModule, CdkDragEnd } from '@angular/cdk/drag-drop';
+import { DragDropModule, CdkDragEnd, CdkDragMove } from '@angular/cdk/drag-drop';
 import { LucideAngularModule, Clock, Cloud, Calendar, CheckSquare, StickyNote, Music, Image as ImageIcon, Home } from 'lucide-angular';
 import { RouterLink } from '@angular/router';
 
@@ -42,10 +42,10 @@ export class DashboardComponent implements OnInit {
     image: false,
   };
 
-  // Store the exact drag positions of each widget
-  positions: Record<string, {x: number, y: number}> = {};
+  positions: Record<string, { x: number, y: number }> = {};
 
   toolboxVisible = false;
+  isTrashHovered = false; // 👈 NEW: Tracks if we are dragging over the drop zone
 
   readonly Icons: Record<string, any> = {
     clock: Clock,
@@ -87,28 +87,50 @@ export class DashboardComponent implements OnInit {
     this.widgets[name] = true;
     this.saveDashboardState();
 
-    // Automatically hide the toolbox if there are no more widgets to show
     if (!this.hasHiddenWidgets) {
       this.toolboxVisible = false;
     }
   }
 
-  onDragEnded(event: CdkDragEnd, widgetName: string) {
-    this.positions[widgetName] = event.source.getFreeDragPosition();
-    this.saveDashboardState();
+  // 👈 NEW: Tracks drag movement in real time
+  onDragMoved(event: CdkDragMove) {
+    const trashThreshold = window.innerWidth - 130; // 130px from the right edge
+    this.isTrashHovered = event.pointerPosition.x >= trashThreshold;
+
+    if (this.isTrashHovered) {
+      this.toolboxVisible = true; // Force toolbox open to show drop zone
+    }
   }
 
-  // NEW CHECK: Returns true if at least one widget is currently hidden
+  // 👈 UPDATED: Handles dropping the widget
+  onDragEnded(event: CdkDragEnd, widgetName: string) {
+    if (this.isTrashHovered) {
+      // 1. Dragged into the drop zone: Hide it
+      this.widgets[widgetName] = false;
+      // 2. Reset offset so it respawns in its original central spot next time
+      this.positions[widgetName] = { x: 0, y: 0 };
+    } else {
+      // Normal drag: Save position
+      this.positions[widgetName] = event.source.getFreeDragPosition();
+    }
+
+    this.isTrashHovered = false; // Reset hover state
+    this.saveDashboardState();
+
+    if (!this.hasHiddenWidgets) {
+      this.toolboxVisible = false;
+    }
+  }
+
   get hasHiddenWidgets(): boolean {
     return Object.values(this.widgets).some(isVisible => !isVisible);
   }
 
-  // 🧭 Smart Toolbox Logic (Mouse Proximity)
   @HostListener('document:mousemove', ['$event'])
   onMouseMove(e: MouseEvent) {
-    const threshold = window.innerWidth * 0.9;
+    if (this.isTrashHovered) return; // Don't interfere if we are dragging to trash
 
-    // Only open the sidebar IF mouse is on the right AND there are actually hidden widgets to show
+    const threshold = window.innerWidth * 0.9;
     if (e.clientX > threshold && this.hasHiddenWidgets) {
       this.toolboxVisible = true;
     } else {
