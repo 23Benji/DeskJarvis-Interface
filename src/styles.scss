@@ -380,54 +380,6 @@ input[type='range'] {
   opacity: 0.8;
 }
 
-/* ────────────────────────────── */
-/* 🌤 DESK JARVIS WEATHER BAR     */
-/* ────────────────────────────── */
-.weather-horizontal {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 380px;
-  height: 90px;
-  padding: 10px 20px;
-  color: #fff;
-  font-family: 'Orbitron', monospace;
-  transition: 0.3s;
-}
-
-.weather-left {
-  font-size: 2.5em;
-  flex-shrink: 0;
-}
-
-.weather-center {
-  text-align: center;
-}
-
-.weather-temp {
-  font-size: 1.8em;
-  line-height: 1;
-}
-
-.weather-desc {
-  font-size: 0.8em;
-  opacity: 0.8;
-}
-
-.weather-right {
-  text-align: right;
-  font-size: 0.9em;
-  line-height: 1.2;
-}
-
-.weather-time {
-  font-size: 1.1em;
-}
-
-.weather-city {
-  opacity: 0.7;
-  font-size: 0.85em;
-}
 
 /* ────────────────────────────── */
 /* 🎵 OFFLINE MUSIC PLAYER        */
