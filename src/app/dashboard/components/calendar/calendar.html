@@ -1,25 +1,23 @@
 <div class="calendar-widget">
-  <div class="calendar-grid">
-    <div *ngFor="let week of calendarGrid" class="calendar-row">
-      <ng-container *ngFor="let day of week">
 
-        <span *ngIf="day &&
-                     day !== 'SU' && day !== 'MO' && day !== 'TU' &&
-                     day !== 'WE' && day !== 'TH' && day !== 'FR' && day !== 'SA'"
-              class="calendar-day"
-              [class.today]="day === currentDay">
-          {{ day | number:'2.0' }}
-        </span>
-
-        <span *ngIf="day && (day === 'SU' || day === 'MO' || day === 'TU' || day === 'WE' || day === 'TH' || day === 'FR' || day === 'SA')"
-              class="calendar-day">
-          {{ day }}
-        </span>
-
-        <span *ngIf="!day" class="calendar-day empty"></span>
-
-      </ng-container>
+  <div class="days-row past-days">
+    <div *ngFor="let day of pastDays" class="small-day-container">
+      <span class="day-label">{{ day.dayName }}</span>
+      <span class="small-day">{{ day.date | number:'2.0' }}</span>
     </div>
   </div>
-  <div class="calendar-footer">{{ monthInfo }}</div>
+
+  <div class="current-date-wrapper">
+    <div class="current-day-name">{{ currentDayName }}</div>
+    <div class="current-number">{{ currentDay | number:'2.0' }}</div>
+    <div class="current-month-year">{{ currentMonthYear }}</div>
+  </div>
+
+  <div class="days-row future-days">
+    <div *ngFor="let day of futureDays" class="small-day-container">
+      <span class="small-day">{{ day.date | number:'2.0' }}</span>
+      <span class="day-label">{{ day.dayName }}</span>
+    </div>
+  </div>
+
 </div>
